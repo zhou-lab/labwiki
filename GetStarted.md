@@ -19,6 +19,21 @@ do this on cirrhus > Request Fileshare Access
 
 add both zhou_lab and zhoulab
 
+### Connections
+
+There are two entry nodes. You can put
+
+```
+Host hpc2
+     HostName respublica-an01.research.chop.edu
+     User zhouw3
+
+Host hpc3
+     HostName respublica-an02.research.chop.edu
+     User zhouw3
+```
+
+in `~/.ssh/config`.
 
 ### Set up your home environment
 
