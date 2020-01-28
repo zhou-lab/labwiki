@@ -1,21 +1,23 @@
-# Table of Content
-<!--ts-->
-   * [Table of Content](#table-of-content)
-   * [JOB SUBMISSION AND MONITORING](#job-submission-and-monitoring)
-   * [PROJECT ORGANIZATION](#project-organization)
-   * [SYMLINKS](#symlinks)
-   * [TWO SHARED LAB FOLDERS](#two-shared-lab-folders)
-   * [LEGACY DATA FOLDERS](#legacy-data-folders)
-   * [HOW TO MOUNT NETWORK DISK?](#how-to-mount-network-disk)
-   * [ENVIRONMENTAL VARIABLES](#environmental-variables)
-   * [REFERENCE GENOMES FOLDER](#reference-genomes-folder)
-   * [USEFUL COMMAND LINE TOOLS](#useful-command-line-tools)
+Table of Contents
+=================
 
-<!-- Added by: zhouw3, at: Tue Jan 28 12:21:23 EST 2020 -->
+<!--ts-->
+   * [Table of Contents](#table-of-contents)
+   * [Job Submission and Monitoring](#job-submission-and-monitoring)
+   * [Project Organization](#project-organization)
+   * [Symlinks](#symlinks)
+   * [Two Shared Lab Folders](#two-shared-lab-folders)
+   * [Legacy Data Folders](#legacy-data-folders)
+   * [How to Mount Network Drives?](#how-to-mount-network-drives)
+   * [Environmental Variables](#environmental-variables)
+   * [Reference Genome Folder](#reference-genome-folder)
+   * [Useful Tools](#useful-tools)
+
+<!-- Added by: zhouw3, at: Tue Jan 28 12:26:14 EST 2020 -->
 
 <!--te-->
 
-# JOB SUBMISSION AND MONITORING
+# Job Submission and Monitoring
 
 Clone this for job submission tools
 
@@ -54,11 +56,11 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
-# PROJECT ORGANIZATION
+# Project Organization
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
 It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`.
 
-# SYMLINKS
+# Symlinks
 Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
 
 - Genome sequence and annotations: `~/references -> /mnt/isilon/zhou_lab/projects/20191221_references`
@@ -67,21 +69,21 @@ Symlinks are great ways to keep your path simple and clean. The real path can be
 - personal scratch space (faster in IO, but cannot be mounted as network disk): `~/scr1_zhouw3 -> /scr1/users/zhouw3`
 - tools (you should create yours): `~/tools -> ~/zhoulab/HFS10T/2019_08_28_HPC_Laird_secondary/2018_05_02_Wanding_tools`
 
-# TWO SHARED LAB FOLDERS
+# Two Shared Lab Folders
 There are two shared lab folders `/mnt/isilon/zhoulab/` and `/mnt/isilon/zhou_lab`. 
 Sorry for the confusing nomenclature but `zhoulab` can be mounted as a network disk on your local computer which means you don't need to sync files back and forth. You can use exactly the same path on HPC and on your local computer by creating a symlink. For example, one my Mac, I have
 `ln -s /Volumes/zhoulab/ /mnt/isilon/zhoulab`
 
 But because of that functionality, `zhoulab` has NO write protection, meaning that important data can get deleted at one mistake! I am now syncing the important data to `zhou_lab` which raw data will be kept read-only, just to add a layer of safety.
 
-# LEGACY DATA FOLDERS
+# Legacy Data Folders
 There are three of them `~/zhoulab/HFS10T/`, `~/zhoulab/HFS8T/` and `~/zhoulab/HFS3T/`. Please make sure you don't write into them. I will also try make them read-only.
 
-# HOW TO MOUNT NETWORK DISK?
+# How to Mount Network Drives?
 If you use a mac, go to Finder > Go > Connect to Server, then put `smb://ressmb03.research.chop.edu/zhoulab`
 Your drive will be at `/Volumes/zhoulab`.
 
-# ENVIRONMENTAL VARIABLES
+# Environmental Variables
 These are the ones I use (you can consider putting them to your `~/.bashrc`, obviously with replacement of your user names)
 
 ```
@@ -97,7 +99,7 @@ alias rdf="readlink -f"
 export PATH=~/bin:~/local/bin:$PATH
 ```
 
-# REFERENCE GENOMES FOLDER
+# Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
 
@@ -145,7 +147,7 @@ Index for each software will be contained in its own folder like `~/references/h
     └── hg19ToHg38.over.chain.gz
 ```
 
-# USEFUL TOOLS
+# Useful Tools
 - [FZF](https://github.com/junegunn/fzf) - fuzzy search
 - [z.sh](https://github.com/rupa/z/blob/master/z.sh) - jump around based on history
 - [gh-md-toc](https://github.com/ekalinin/github-markdown-toc) - create TOC for markdown files
