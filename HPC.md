@@ -1,3 +1,20 @@
+# Table of Content
+<!--ts-->
+   * [Table of Content](#table-of-content)
+   * [JOB SUBMISSION AND MONITORING](#job-submission-and-monitoring)
+   * [PROJECT ORGANIZATION](#project-organization)
+   * [SYMLINKS](#symlinks)
+   * [TWO SHARED LAB FOLDERS](#two-shared-lab-folders)
+   * [LEGACY DATA FOLDERS](#legacy-data-folders)
+   * [HOW TO MOUNT NETWORK DISK?](#how-to-mount-network-disk)
+   * [ENVIRONMENTAL VARIABLES](#environmental-variables)
+   * [REFERENCE GENOMES FOLDER](#reference-genomes-folder)
+   * [USEFUL COMMAND LINE TOOLS](#useful-command-line-tools)
+
+<!-- Added by: zhouw3, at: Tue Jan 28 12:21:23 EST 2020 -->
+
+<!--te-->
+
 # JOB SUBMISSION AND MONITORING
 
 Clone this for job submission tools
@@ -39,7 +56,7 @@ find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 
 # PROJECT ORGANIZATION
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
-It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`
+It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`.
 
 # SYMLINKS
 Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
