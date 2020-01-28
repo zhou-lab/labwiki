@@ -1,7 +1,7 @@
 ### Apply for digital identity
-Non-traditional Personnel (NTP) if applicable
-Export control if applicable (OIVS, Adrienne Gigantino).
-Jim did this for me last time.
+- Non-traditional Personnel (NTP) if applicable
+- Export control if applicable (OIVS, Adrienne Gigantino).
+- Jim did this for me last time.
 
 ### Get remote access set up
 
