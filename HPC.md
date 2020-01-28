@@ -4,6 +4,7 @@ Table of Contents
 <!--ts-->
    * [Table of Contents](#table-of-contents)
    * [Job Submission and Monitoring](#job-submission-and-monitoring)
+   * [Keep Job Running After Disconnection](#keep-job-running-after-disconnection)
    * [Project Organization](#project-organization)
    * [Symlinks](#symlinks)
    * [Two Shared Lab Folders](#two-shared-lab-folders)
@@ -13,7 +14,7 @@ Table of Contents
    * [Reference Genome Folder](#reference-genome-folder)
    * [Useful Tools](#useful-tools)
 
-<!-- Added by: zhouw3, at: Tue Jan 28 12:26:14 EST 2020 -->
+<!-- Added by: zhouw3, at: Tue Jan 28 15:39:44 EST 2020 -->
 
 <!--te-->
 
