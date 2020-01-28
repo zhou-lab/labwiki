@@ -56,6 +56,21 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
+# Keep Job Running After Disconnection
+
+Use GNU screen. You can download my [screenrc file](https://github.com/zhou-lab/labwiki/blob/master/config/screenrc) and 
+
+```
+export SCREENRC=<path_to_screenrc>
+```
+
+- F2 new panel
+- F11/F12 switch left and right
+- screen -r reattach
+- Ctrl-D detach
+
+For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
+
 # Project Organization
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
 It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`.
