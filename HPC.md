@@ -145,7 +145,7 @@ Index for each software will be contained in its own folder like `~/references/h
     └── hg19ToHg38.over.chain.gz
 ```
 
-# USEFUL COMMAND LINE TOOLS
+# USEFUL TOOLS
 - [FZF](https://github.com/junegunn/fzf) - fuzzy search
 - [z.sh](https://github.com/rupa/z/blob/master/z.sh) - jump around based on history
-
+- [gh-md-toc](https://github.com/ekalinin/github-markdown-toc) - create TOC for markdown files
