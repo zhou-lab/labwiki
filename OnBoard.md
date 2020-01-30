@@ -18,6 +18,12 @@
 
 ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
 
+### Web Citrix Workspace Remote Access
+
+- Go to [https://connect.chop.edu](connect.chop.edu)
+- Put your user name, password and Entrust token (see above for how to get that)
+- click on Desktop and you should be able to access CHOP server using terminal.
+
 ### Be Added to HPC Storage Share
 
 - Go to 
