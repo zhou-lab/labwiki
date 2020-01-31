@@ -18,6 +18,10 @@ Table of Contents
 
 <!--te-->
 
+# Unix Tutorial
+
+[http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
+
 # Job Submission and Monitoring
 
 Clone this for job submission tools
