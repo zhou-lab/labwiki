@@ -24,19 +24,11 @@ Table of Contents
 
 # Job Submission and Monitoring
 
-Clone this for job submission tools
+We have the follow repo cloned to `/mnt/isilon/zhoulab/labpipelines` for job submission tools
 
 [https://github.com/zhou-lab/labpipelines](https://github.com/zhou-lab/labpipelines)
 
-Make pipelines available for execution
-
-```
-export PATH=~/repo/labpipelines/pipelines:$PATH
-export WZSEQ_ENTRY=~/repo/labpipelines/entry/wzseq.sh
-ln -s `rf ~/repo/labpipelines/pbsgen/pbsgen_respublica.py` ~/bin/pbsgen
-```
-
-Alias in `.bashrc` for quick job submission, deletion, monitoring
+Alias are defined in `/mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab` for quick job submission, deletion, monitoring
 
 ```
 alias qsubi='qlogin -q interactive.q' # interactive job
@@ -63,16 +55,12 @@ find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 
 # Keep Job Running After Disconnection
 
-Use GNU screen. You can download my [screenrc file](https://github.com/zhou-lab/labwiki/blob/master/config/screenrc) and 
+Use `screen` and run everything inside.
 
-```
-export SCREENRC=<path_to_screenrc>
-```
-
-- F2 new panel
-- F11/F12 switch left and right
-- screen -r reattach
-- Ctrl-D detach
+- `F2` new panel
+- `F11`/`F12` switch left and right
+- `screen -r reattach`
+- `Ctrl-a d` detach
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 
@@ -80,14 +68,16 @@ For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
 It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`.
 
+# Project Documentation
+Please document every command needed and working directory for analysis. Create your git repository in `~/zhoulab/labprojects`. See my in `zhouw3` for some examples.
+
 # Symlinks
 Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
 
 - Genome sequence and annotations: `~/references -> /mnt/isilon/zhou_lab/projects/20191221_references`
 - shared lab storage (can be mounted as network disk): `~/zhoulab -> /mnt/isilon/zhoulab`
 - shared lab storage (cannot be mounted as network disk): `~/zhou_lab -> /mnt/isilon/zhou_lab`
-- personal scratch space (faster in IO, but cannot be mounted as network disk): `~/scr1_zhouw3 -> /scr1/users/zhouw3`
-- tools (you should create yours): `~/tools -> ~/zhoulab/HFS10T/2019_08_28_HPC_Laird_secondary/2018_05_02_Wanding_tools`
+- personal scratch space (faster in IO, but cannot be mounted as network disk): `~/scr1_CHOPID -> /scr1/users/CHOPID`
 
 # Two Shared Lab Folders
 There are two shared lab folders `/mnt/isilon/zhoulab/` and `/mnt/isilon/zhou_lab`. 
@@ -97,7 +87,7 @@ Sorry for the confusing nomenclature but `zhoulab` can be mounted as a network d
 But because of that functionality, `zhoulab` has NO write protection, meaning that important data can get deleted at one mistake! I am now syncing the important data to `zhou_lab` which raw data will be kept read-only, just to add a layer of safety.
 
 # Legacy Data Folders
-There are three of them `~/zhoulab/HFS10T/`, `~/zhoulab/HFS8T/` and `~/zhoulab/HFS3T/`. Please make sure you don't write into them. I will also try make them read-only.
+There are three of them `~/zhou_lab/HFS10T/`, `~/zhou_lab/HFS8T/` and `~/zhou_lab/HFS3T/`. Please make sure you don't write into them. I will also try make them read-only.
 
 # How to Mount Network Drives?
 If you use a mac, go to Finder > Go > Connect to Server, then put `smb://ressmb03.research.chop.edu/zhoulab`
@@ -108,22 +98,6 @@ sudo mkdir -p /mnt/isilon/
 ln -sf /Volumes/zhoulab/ /mnt/isilon/zhoulab
 ```
 so that you can use the same path on HPC and local machine.
-
-# Environmental Variables
-These are the ones I use (you can consider putting them to your `~/.bashrc`, obviously with replacement of your user names)
-
-```
-alias rm='rm -i'
-alias lc="wc -l"
-alias ll="ls -l"
-alias parallel="parallel --gnu --progress"
-alias scp='rsync -Pravdtze ssh'
-alias awk='awk -F"\t" -v OFS="\t"'
-alias les="less -S"
-alias rdf="readlink -f"
-
-export PATH=~/bin:~/local/bin:$PATH
-```
 
 # Reference Genome Folder
 
@@ -177,3 +151,4 @@ Index for each software will be contained in its own folder like `~/references/h
 - [FZF](https://github.com/junegunn/fzf) - fuzzy search
 - [z.sh](https://github.com/rupa/z/blob/master/z.sh) - jump around based on history
 - [gh-md-toc](https://github.com/ekalinin/github-markdown-toc) - create TOC for markdown files
+- [Renv](https://github.com/viking/Renv) - multiple R installation and switches
