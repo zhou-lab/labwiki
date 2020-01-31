@@ -66,5 +66,11 @@ copy `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys/`
 
 ### HPC Set up Environment
 
-- `.bashrc` and `~/bin/`, setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/master/HPC.md)
-- Zhou lab pipelines, see [https://github.com/zhou-lab/labpipelines](https://github.com/zhou-lab/labpipelines)
+Put
+```
+. /mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab
+```
+
+to `~/.bashrc`
+
+Setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/master/HPC.md)
