@@ -18,6 +18,10 @@ Table of Contents
 
 <!--te-->
 
+# Unix Tutorial
+
+[http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
+
 # Job Submission and Monitoring
 
 Clone this for job submission tools
@@ -97,7 +101,13 @@ There are three of them `~/zhoulab/HFS10T/`, `~/zhoulab/HFS8T/` and `~/zhoulab/H
 
 # How to Mount Network Drives?
 If you use a mac, go to Finder > Go > Connect to Server, then put `smb://ressmb03.research.chop.edu/zhoulab`
-Your drive will be at `/Volumes/zhoulab`.
+Your drive will be at `/Volumes/zhoulab`. I usually also do 
+
+```
+sudo mkdir -p /mnt/isilon/
+ln -sf /Volumes/zhoulab/ /mnt/isilon/zhoulab
+```
+so that you can use the same path on HPC and local machine.
 
 # Environmental Variables
 These are the ones I use (you can consider putting them to your `~/.bashrc`, obviously with replacement of your user names)
