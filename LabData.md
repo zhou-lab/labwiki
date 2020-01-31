@@ -5,7 +5,6 @@ Lab Data Paths (on Respublica)
 ### TCGA WGBS 
 ```
 ~/zhou_lab/projects/20200101_TCGA_WGBS
-test test
 ```
 
 ### Human WGBS	
