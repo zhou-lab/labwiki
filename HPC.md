@@ -74,10 +74,26 @@ Please document every command needed and working directory for analysis. Create 
 # Symlinks
 Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
 
-- Genome sequence and annotations: `~/references -> /mnt/isilon/zhou_lab/projects/20191221_references`
-- shared lab storage (can be mounted as network disk): `~/zhoulab -> /mnt/isilon/zhoulab`
-- shared lab storage (cannot be mounted as network disk): `~/zhou_lab -> /mnt/isilon/zhou_lab`
-- personal scratch space (faster in IO, but cannot be mounted as network disk): `~/scr1_CHOPID -> /scr1/users/CHOPID`
+- Genome sequence and annotations:
+
+```
+ln -s /mnt/isilon/zhou_lab/projects/20191221_references ~/references
+```
+- shared lab storage (can be mounted as network disk):
+
+```
+ln -s /mnt/isilon/zhoulab ~/zhoulab
+```
+- shared lab storage (cannot be mounted as network disk):
+
+```
+ln -s /mnt/isilon/zhou_lab ~/zhou_lab
+```
+- personal scratch space (faster in IO, but cannot be mounted as network disk, replace CHOPID by your ID): 
+
+```
+ln -s /scr1/users/CHOPID ~/scr1_CHOPID
+```
 
 # Two Shared Lab Folders
 There are two shared lab folders `/mnt/isilon/zhoulab/` and `/mnt/isilon/zhou_lab`. 
