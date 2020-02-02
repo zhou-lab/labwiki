@@ -18,11 +18,9 @@ Table of Contents
 
 <!--te-->
 
-# Unix Tutorial
+## Unix Tutorial
 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
-
-# Setup
 
 ## Environment Variables
 
@@ -41,23 +39,29 @@ Symlinks are great ways to keep your path simple and clean. The real path can be
 ```
 ln -s /mnt/isilon/zhou_lab/projects/20191221_references ~/references
 ```
-- shared lab storage (can be mounted as network disk):
+- Lab softwares:
+
+```
+ln -s /mnt/isilon/zhoulab/labsoftware ~/software
+```
+
+- Shared lab storage (can be mounted as network disk):
 
 ```
 ln -s /mnt/isilon/zhoulab ~/zhoulab
 ```
-- shared lab storage (cannot be mounted as network disk):
+- Shared lab storage (cannot be mounted as network disk):
 
 ```
 ln -s /mnt/isilon/zhou_lab ~/zhou_lab
 ```
-- personal scratch space (faster in IO, but cannot be mounted as network disk, replace CHOPID by your ID): 
+- Personal scratch space (faster in IO, but cannot be mounted as network disk, replace CHOPID by your ID): 
 
 ```
-ln -s /scr1/users/CHOPID ~/scr1_CHOPID
+ln -s /scr1/users/<CHOPID> ~/scr1_<CHOPID>
 ```
 
-# Job Submission and Monitoring
+## Job Submission and Monitoring
 
 We have the follow repo cloned to `/mnt/isilon/zhoulab/labpipelines` for job submission tools
 
@@ -88,7 +92,7 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
-# Keep Job Running After Disconnection
+## Keep Job Running After Disconnection
 
 Use `screen` and run everything inside.
 
@@ -99,24 +103,31 @@ Use `screen` and run everything inside.
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 
-# Project Organization
+## Project Organization
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
 It'd be better you follow the nomenclature starting with a date when creating your project folder, like `20200102_SPLiTseq_mouse_brain` and `20200106_human_WGBS`.
 
-# Project Documentation
+## Project Documentation
 Please document every command needed and working directory for analysis. Create your git repository in `~/zhoulab/labprojects`. See my in `zhouw3` for some examples.
 
-# Two Shared Lab Folders
+```
+cd `/zhoulab/labprojects
+mkdir <CHOPID>
+cd <CHOPID>
+git init
+```
+
+## Two Shared Lab Folders
 There are two shared lab folders `/mnt/isilon/zhoulab/` and `/mnt/isilon/zhou_lab`. 
 Sorry for the confusing nomenclature but `zhoulab` can be mounted as a network disk on your local computer which means you don't need to sync files back and forth. You can use exactly the same path on HPC and on your local computer by creating a symlink. For example, one my Mac, I have
 `ln -s /Volumes/zhoulab/ /mnt/isilon/zhoulab`
 
 But because of that functionality, `zhoulab` has NO write protection, meaning that important data can get deleted at one mistake! I am now syncing the important data to `zhou_lab` which raw data will be kept read-only, just to add a layer of safety.
 
-# Legacy Data Folders
+## Legacy Data Folders
 There are three of them `~/zhou_lab/HFS10T/`, `~/zhou_lab/HFS8T/` and `~/zhou_lab/HFS3T/`. Please make sure you don't write into them. I will also try make them read-only.
 
-# How to Mount Network Drives?
+## How to Mount Network Drives?
 If you use a mac, go to Finder > Go > Connect to Server, then put `smb://ressmb03.research.chop.edu/zhoulab`
 Your drive will be at `/Volumes/zhoulab`. I usually also do 
 
@@ -126,7 +137,7 @@ ln -sf /Volumes/zhoulab/ /mnt/isilon/zhoulab
 ```
 so that you can use the same path on HPC and local machine.
 
-# Reference Genome Folder
+## Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
 
@@ -174,7 +185,7 @@ Index for each software will be contained in its own folder like `~/references/h
     └── hg19ToHg38.over.chain.gz
 ```
 
-# Useful Tools
+## Useful Tools
 - [FZF](https://github.com/junegunn/fzf) - fuzzy search
 - [z.sh](https://github.com/rupa/z/blob/master/z.sh) - jump around based on history
 - [gh-md-toc](https://github.com/ekalinin/github-markdown-toc) - create TOC for markdown files
