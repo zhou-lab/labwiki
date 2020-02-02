@@ -13,16 +13,10 @@
 - search "remote access"
 - fill out the form and submit
 - download 'Entrust IdentityGuard Mobile' on your phone, and set up following [https://ishelp.chop.edu/](https://ishelp.chop.edu/)
-- install 'Cisco AnyConnect' on your PC/Mac [https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html](https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html) or [https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp](https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp)
+- install 'Cisco AnyConnect' on your PC/Mac [https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html](https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html) or [https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp](https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp). Drexel has a copy.
 - Put 'remote.chop.edu' Cisco AnyConnect, when prompted, put your CHOP ID on the first line, what you get from 'Entrust' for Passcode on the second line, and your CHOP password for the 2nd passcode on the third.
 
 ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
-
-### Web Citrix Workspace Remote Access
-
-- Go to [https://connect.chop.edu](connect.chop.edu)
-- Put your user name, password and Entrust token (see above for how to get that)
-- click on Desktop and you should be able to access CHOP server using terminal.
 
 ### Be Added to HPC Storage Share
 
@@ -44,20 +38,24 @@ ssh <CHOPID>@respublica.research.chop.edu
 
 `respublica.research.chop.edu` randomly assigns you one of the two login nodes (`respublica-an01.research.chop.edu` and `respublica-an02.research.chop.edu`)
 
-There are two entry nodes. You can put
+
+### .ssh configuration
+
+You can put
 
 ```
 Host hpc2
      HostName respublica-an01.research.chop.edu
-     User <your_user_id>
+     User <CHOPID>
 
 Host hpc3
      HostName respublica-an02.research.chop.edu
-     User <your_user_id>
+     User <CHOPID>
 ```
 
-in `~/.ssh/config`.
+in `~/.ssh/config` and use `ssh hpc2` and `ssh hpc3` to connect.
 
+### .ssh password-less entry
 
 For ssh key entry, follow instruction at [https://www.ssh.com/ssh/keygen](https://www.ssh.com/ssh/keygen)
 
@@ -65,7 +63,7 @@ For ssh key entry, follow instruction at [https://www.ssh.com/ssh/keygen](https:
 ssh-keygen -t rsa
 ```
 
-copy `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys/`
+Append `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys/`
 
 
 ### HPC Set up Environment
@@ -75,6 +73,12 @@ Put
 . /mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab
 ```
 
-to `~/.bashrc`
+to `~/.bashrc` (customize if you know how and feel like so).
 
 Setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/master/HPC.md)
+
+### Web Citrix Workspace Remote Access (an inconvenient alternative)
+
+- Go to [https://connect.chop.edu](connect.chop.edu)
+- Put your user name, password and Entrust token (see above for how to get that)
+- click on Desktop and you should be able to access CHOP server using terminal.

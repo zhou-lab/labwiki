@@ -22,6 +22,41 @@ Table of Contents
 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
 
+# Setup
+
+## Environment Variables
+
+Append
+```
+source /mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab
+```
+
+to `~/.bashrc`.
+
+## Symlinks
+Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
+
+- Genome sequence and annotations:
+
+```
+ln -s /mnt/isilon/zhou_lab/projects/20191221_references ~/references
+```
+- shared lab storage (can be mounted as network disk):
+
+```
+ln -s /mnt/isilon/zhoulab ~/zhoulab
+```
+- shared lab storage (cannot be mounted as network disk):
+
+```
+ln -s /mnt/isilon/zhou_lab ~/zhou_lab
+```
+- personal scratch space (faster in IO, but cannot be mounted as network disk, replace CHOPID by your ID): 
+
+```
+ln -s /scr1/users/CHOPID ~/scr1_CHOPID
+```
+
 # Job Submission and Monitoring
 
 We have the follow repo cloned to `/mnt/isilon/zhoulab/labpipelines` for job submission tools
@@ -70,30 +105,6 @@ It'd be better you follow the nomenclature starting with a date when creating yo
 
 # Project Documentation
 Please document every command needed and working directory for analysis. Create your git repository in `~/zhoulab/labprojects`. See my in `zhouw3` for some examples.
-
-# Symlinks
-Symlinks are great ways to keep your path simple and clean. The real path can be seen with `readlink -f`. Here are some common symlinks:
-
-- Genome sequence and annotations:
-
-```
-ln -s /mnt/isilon/zhou_lab/projects/20191221_references ~/references
-```
-- shared lab storage (can be mounted as network disk):
-
-```
-ln -s /mnt/isilon/zhoulab ~/zhoulab
-```
-- shared lab storage (cannot be mounted as network disk):
-
-```
-ln -s /mnt/isilon/zhou_lab ~/zhou_lab
-```
-- personal scratch space (faster in IO, but cannot be mounted as network disk, replace CHOPID by your ID): 
-
-```
-ln -s /scr1/users/CHOPID ~/scr1_CHOPID
-```
 
 # Two Shared Lab Folders
 There are two shared lab folders `/mnt/isilon/zhoulab/` and `/mnt/isilon/zhou_lab`. 
