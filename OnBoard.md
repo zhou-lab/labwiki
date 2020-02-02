@@ -63,7 +63,7 @@ For ssh key entry, follow instruction at [https://www.ssh.com/ssh/keygen](https:
 ssh-keygen -t rsa
 ```
 
-Append `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys/`
+Append `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys`
 
 
 ### HPC Set up Environment
