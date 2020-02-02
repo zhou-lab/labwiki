@@ -37,6 +37,13 @@ Cirrus
 
 ### HPC Connections
 
+```
+ssh <CHOPID>@respublica.research.chop.edu
+```
+
+
+`respublica.research.chop.edu` randomly assigns you one of the two login nodes (`respublica-an01.research.chop.edu` and `respublica-an02.research.chop.edu`)
+
 There are two entry nodes. You can put
 
 ```
@@ -51,9 +58,6 @@ Host hpc3
 
 in `~/.ssh/config`.
 
-```
-ssh <your_user_id>@respublica.research.chop.edu
-```
 
 For ssh key entry, follow instruction at [https://www.ssh.com/ssh/keygen](https://www.ssh.com/ssh/keygen)
 
