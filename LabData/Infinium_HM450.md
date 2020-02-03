@@ -1,5 +1,23 @@
 # HM450
 
+## TCGA Infinium HM450 microarray
+
+10102 samples from 33 cancer types in TCGA. 700+ tumor adjacent normals.
+
+```
+~/zhou_lab/projects/20200202_TCGA_HM450
+```
+Original data at
+
+```
+~/zhou_lab/HFS10T/2019_08_28_HPC_Laird_primary/2016_04_05_TCGA_pancan_renormalization
+```
+
+Metadata:
+
+- Cancer type annotation: `zhou_lab/projects/20200202_TCGA_HM450/merged_mapping`
+
+
 ## Blood
 
 #### GSE35069 (Sorted Blood)
