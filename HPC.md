@@ -98,8 +98,10 @@ Use `screen` and run everything inside.
 
 - `F2` new panel
 - `F11`/`F12` switch left and right
-- `screen -r reattach`
+- `screen -r(sr)` reattach
 - `Ctrl-a d` detach
+- `Ctrl-a K(cap K)` kill the current window
+- `Ctrl-a [` copy mode
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 
