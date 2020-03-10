@@ -101,7 +101,8 @@ Use `screen` and run everything inside.
 - `screen -r(sr)` reattach
 - `Ctrl-a d` detach
 - `Ctrl-a K(cap K)` kill the current window
-- `Ctrl-a [` copy mode
+- `Ctrl-a [` copy mode and use `shift+up/down` to scroll up and down
+- `Ctrl-a A` set current window title
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 
