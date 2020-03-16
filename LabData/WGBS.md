@@ -78,16 +78,6 @@ pipeline
 ~/zhou_lab/HFS10T/2019_08_28_HPC_Laird_secondary/2015-06-09-mouse-WGBS
 ```
 
-### [reworking] Single-cell WGBS (Smallwood)
-
-```
-~/zhou_lab/projects/20200202_Smallwood_scWGBS
-```
-
-pipeline
-```
-20171116_scWGBS_SmallWood2014.pipe.sh
-```
 
 ### Mouse Zygotes PBAT
 
