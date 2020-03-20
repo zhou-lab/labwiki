@@ -153,6 +153,10 @@ transfer files from local to HPC:
 ```
 scp ~/path/on/local username@respublica.research.chop.edu:/path/on/hpc/ 
 ```
+transfer directory from HPC to local:
+```
+scp -r ~/path/on/local username@respublica.research.chop.edu:/path/on/hpc/ 
+```
 
 ## Reference Genome Folder
 
