@@ -142,6 +142,22 @@ ln -sf /Volumes/zhoulab/ /mnt/isilon/zhoulab
 ```
 so that you can use the same path on HPC and local machine.
 
+## Transfer files from/to HPC
+transfer files from HPC to local:
+
+```
+scp username@respublica.research.chop.edu:/path/on/hpc/ ~/path/on/local
+```
+transfer files from local to HPC:
+
+```
+scp ~/path/on/local username@respublica.research.chop.edu:/path/on/hpc/ 
+```
+transfer directory from HPC to local:
+```
+scp -r ~/path/on/local username@respublica.research.chop.edu:/path/on/hpc/ 
+```
+
 ## Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
