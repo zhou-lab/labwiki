@@ -1,3 +1,7 @@
+- Ben Langmead's Algorithms for DNA Sequencing - YouTube
+https://www.youtube.com/playlist?list=PL2mpR0RYFQsBiCWVJSvVAO3OJ2t7DzoHA
+https://www.coursera.org/learn/dna-sequencing ).
+
 - Advanced R
 http://adv-r.had.co.nz/
 
