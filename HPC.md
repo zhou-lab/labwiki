@@ -7,7 +7,7 @@ Table of Contents
       * [Environment Variables](#environment-variables)
       * [Symlinks](#symlinks)
       * [Job Submission and Monitoring](#job-submission-and-monitoring)
-      * [Oneline convenience function](#oneline-convenience-function)
+      * [Oneline Convenience Function](#oneline-convenience-function)
       * [Keep Job Running After Disconnection](#keep-job-running-after-disconnection)
       * [Submission Script](#submission-script)
       * [Project Organization](#project-organization)
@@ -96,7 +96,7 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
-## Oneline convenience function
+## Oneline Convenience Function
 
 Other functions that makes job submission easier `qsub24`, `qsub12`, `qsub4`, `qsub1` (for 24, 12, 4, and 1 core(s)). You can copy paste your command and it will auto-generate submission script and submit. All needs be ended with `QSEND\n)"`, see an example below,
 
@@ -143,9 +143,9 @@ Use `screen` and run everything inside.
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
 
-## Submission Script
+## Submission Script from Scratch
 
-Most cases you can use `pbsgen` for auto-generated submission script. But more details of the submission script can be found at 
+Most cases you can use `pbsgen` and `qsubi`, `qsub1-24` for auto-generated submission script (see above). But more details of the submission script can be found at 
 [https://wiki.chop.edu/display/RISUD/Grid+Engine](https://wiki.chop.edu/display/RISUD/Grid+Engine). The job specs can be placed either on the command line at the head of the script. There is no time limit.
 
 ```
