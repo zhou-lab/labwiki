@@ -3,18 +3,23 @@ Table of Contents
 
 <!--ts-->
    * [Table of Contents](#table-of-contents)
-   * [Job Submission and Monitoring](#job-submission-and-monitoring)
-   * [Keep Job Running After Disconnection](#keep-job-running-after-disconnection)
-   * [Project Organization](#project-organization)
-   * [Symlinks](#symlinks)
-   * [Two Shared Lab Folders](#two-shared-lab-folders)
-   * [Legacy Data Folders](#legacy-data-folders)
-   * [How to Mount Network Drives?](#how-to-mount-network-drives)
-   * [Environmental Variables](#environmental-variables)
-   * [Reference Genome Folder](#reference-genome-folder)
-   * [Useful Tools](#useful-tools)
+      * [Unix Tutorial](#unix-tutorial)
+      * [Environment Variables](#environment-variables)
+      * [Symlinks](#symlinks)
+      * [Job Submission and Monitoring](#job-submission-and-monitoring)
+      * [Oneline convenience function](#oneline-convenience-function)
+      * [Keep Job Running After Disconnection](#keep-job-running-after-disconnection)
+      * [Submission Script](#submission-script)
+      * [Project Organization](#project-organization)
+      * [Project Documentation](#project-documentation)
+      * [Two Shared Lab Folders](#two-shared-lab-folders)
+      * [Legacy Data Folders](#legacy-data-folders)
+      * [How to Mount Network Drives?](#how-to-mount-network-drives)
+      * [Transfer files from/to HPC](#transfer-files-fromto-hpc)
+      * [Reference Genome Folder](#reference-genome-folder)
+      * [Useful Tools](#useful-tools)
 
-<!-- Added by: zhouw3, at: Tue Jan 28 15:39:44 EST 2020 -->
+<!-- Added by: zhouw3, at: Sat Apr 25 17:48:17 EDT 2020 -->
 
 <!--te-->
 
@@ -92,6 +97,39 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
+## Oneline convenience function
+
+Other functions that makes job submission easier `qsub24`, `qsub12`, `qsub4`, `qsub1` (for 24, 12, 4, and 1 core(s)). You can copy paste your command and it will auto-generate submission script and submit. All needs be ended with `QSEND\n)"`, see an example below,
+
+```
+qsub24
+<your commands>
+QSEND
+)"
+```
+Note you cannot have space before `QSEND` and `)"` needs to be on the second line.
+
+Some functions to allow R jobs easier `qsubR24`, `qsubR12`, `qsubR4`, `qsubR1` (for 24, 12, 4, and 1 core(s)). All needs be ended with `QSREND\nQSEND\n)"', see the following example,
+
+```
+qsubR4
+<your commands>
+QSREND
+QSEND
+)"
+```
+
+You can control the location of your scripts by setting the variables
+```
+# change this if you want to just change the folder where pbs file is auto-generated
+export PBSDIR=/mnt/isilon/zhoulab/tmp/pbs
+# change this if you don't like the job name
+export PBSROOT=LabJob
+# change this if you want to explicitly control pbs file location
+export PBSPATH=NA
+```
+You can customize these in your `~/.bashrc` file after loading the zhoulab file.
+
 ## Keep Job Running After Disconnection
 
 Use `screen` and run everything inside.
@@ -105,6 +143,17 @@ Use `screen` and run everything inside.
 - `Ctrl-a A` set current window title
 
 For more see [video tutorial](https://www.youtube.com/watch?v=HomIzLB-HBc)
+
+## Submission Script
+
+Most cases you can use `pbsgen` for auto-generated submission script. But more details of the submission script can be found at 
+[https://wiki.chop.edu/display/RISUD/Grid+Engine](https://wiki.chop.edu/display/RISUD/Grid+Engine). The job specs can be placed either on the command line at the head of the script. There is no time limit.
+
+```
+qsub -l h_vmem=4G -l m_mem_free=4G -pe smp 2 script.sh
+```
+
+**This is an important thing about SMP, whatever -l <resource> request you make, is multiplied by your SMP count. So if I want 4 cores but 32GB memory, I need to submit with -l h_vmem=8G -l m_mem_free=8G -pe smp 4.** With `pbsgen` it is specified with `-memG 8` option.
 
 ## Project Organization
 Your project workspace should ideally be sitting at `~/zhou_lab/projects/`.
