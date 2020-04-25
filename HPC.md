@@ -102,7 +102,7 @@ Other functions that makes job submission easier `qsub24`, `qsub12`, `qsub4`, `q
 
 ```
 qsub24
-<your commands>
+<your bash code>
 QSEND
 )"
 ```
@@ -112,7 +112,7 @@ Some functions to allow R jobs easier `qsubR24`, `qsubR12`, `qsubR4`, `qsubR1` (
 
 ```
 qsubR4
-<your commands>
+<your R code>
 QSREND
 QSEND
 )"
