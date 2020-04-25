@@ -80,15 +80,14 @@ alias qstatall='qstat -u "*" | less'  # check all job status
 alias qstatallrun='qstat -u "*" -s r | less' # check all user jobs
 alias qhost='qhost | less' # check queue status
 alias qwatch="watch qstat" # keep monitoring jobs
-function qdelall {
-  qstat | grep 'zhouw3' | awk -F " " '{print $1}' | xargs -I {} qdel {}
-}
+export HPCUSERNAME=zhouw3
+qdelall
 ```
 
 Execute one job
 
 ```
-pbsgen one "samtools index a_bam.bam" -dest <path_for_script> -submit
+pbsgen one "<your command>" -pbs <dir_for_autogenereate> -dest <path_for_script> -submit
 ```
 
 Submit multiple jobs with script
