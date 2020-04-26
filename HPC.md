@@ -20,7 +20,7 @@ Table of Contents
       * [Reference Genome Folder](#reference-genome-folder)
       * [Useful Tools](#useful-tools)
 
-<!-- Added by: zhouw3, at: Sat Apr 25 21:08:02 EDT 2020 -->
+<!-- Added by: zhouw3, at: Sun Apr 26 09:59:15 EDT 2020 -->
 
 <!--te-->
 
@@ -105,7 +105,7 @@ find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 
 Notice in the examples below `qsub` can be replaced with `qsub1`, `qsub4`, `qsub12` and `qsub24`.
 
-Here string
+Here string (importantly no space before and after `EOF`, see [here](https://linuxize.com/post/bash-heredoc/) for some tutorial about heredoc).
 ```
 qsub12 <<'EOF'
 <your command>
