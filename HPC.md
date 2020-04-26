@@ -89,17 +89,17 @@ export HPCUSERNAME=zhouw3
 qdelall
 ```
 
-More colorful qstat
+qstat on running jobs only
 
 ```
 qstatz
 qwatchz
 ```
 
-Execute one job
+Execute one job (more about pbsgen below)
 
 ```
-pbsgen "<your command>" -pbs <dir_for_autogenereate> -dest <path_for_script> -submit
+pbsgen "<your command>" -submit
 ```
 
 Submit multiple jobs with script
