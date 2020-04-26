@@ -89,6 +89,13 @@ export HPCUSERNAME=zhouw3
 qdelall
 ```
 
+More colorful qstat
+
+```
+qstatz
+qwatchz
+```
+
 Execute one job
 
 ```
