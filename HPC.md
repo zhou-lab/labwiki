@@ -28,6 +28,10 @@ Table of Contents
 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
 
+Specs of Respublica, how many nodes, cpus.
+
+[https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Basic+Cluster+Information](https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Basic+Cluster+Information)
+
 ## Environment Variables
 
 Append
