@@ -92,7 +92,7 @@ qdelall
 Execute one job
 
 ```
-pbsgen one "<your command>" -pbs <dir_for_autogenereate> -dest <path_for_script> -submit
+pbsgen "<your command>" -pbs <dir_for_autogenereate> -dest <path_for_script> -submit
 ```
 
 Submit multiple jobs with script
@@ -141,34 +141,30 @@ EOF
 
 ## pbsgen-style submission
 
-This is when you need more control over the pbs file generated. Just like qsub series, we have `psub` series: `psub24`, `psub12`, `psub4`, `psub1` (for 24, 12, 4, and 1 core(s)). You can copy paste your command and it will auto-generate submission script and submit. All needs be ended with `PSEND\n)"`, see an example below,
+This is when you need more control over the pbs file generated, see an example below.
 
 ```
-psub24
+cat <<'EOF' | pbsgen -submit -ppn 1
 <your bash code>
-PSEND
-)"
+EOF
 ```
-Note you cannot have space before `PSEND` and `)"` needs to be on the second line.
 
-Some functions to allow R jobs easier `psubR24`, `psubR12`, `psubR4`, `psubR1` (for 24, 12, 4, and 1 core(s)). All needs be ended with `PSREND\nPSEND\n)"`, see the following example,
+Here is the example for R
 
 ```
-psubR4
+cat <<'EOF' | pbsgen -submit -ppn 1
+Rscript - <<'EOF2'
 <your R code>
-PSREND
-PSEND
-)"
+EOF2
+EOF
 ```
 
-You can control the location of your scripts by setting the variables
+You can control the default location of your scripts by setting the variables
 ```
 # change this if you want to just change the folder where pbs file is auto-generated
 export PBSDIR=/mnt/isilon/zhoulab/tmp/pbs
 # change this if you don't like the job name
 export PBSROOT=LabJob
-# change this if you want to explicitly control pbs file location
-export PBSPATH=NA
 ```
 You can customize these in your `~/.bashrc` file after loading the zhoulab file.
 
