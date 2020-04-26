@@ -172,7 +172,7 @@ Example 1: You just don't care where the script file is generated
 pbsgen "echo Hello world"
 ```
 
-This creates job `j<i>_$NAMEROOT` at`$PBSDIR/j<i>_$NAMEROOT`. `<i>` is auto-incremented.
+This creates job `j<i>_$NAMEROOT` at`$PBSDIR/j<i>_$NAMEROOT.pbs`. `<i>` is auto-incremented.
 
 Example 2: You want specify job name and script name but don't care where.
 ```
@@ -193,7 +193,7 @@ Example 4: You want script to be generated at a given location (like current dir
 pbsgen "echo Hello World" -pbsdir .
 ```
 
-This creates job `j<i>_$NAMEROOT` at`~/test/j<i>_$NAMEROOT.pbs`. `<i>` is auto-incremented.
+This creates job `j<i>_$NAMEROOT` at`./j<i>_$NAMEROOT.pbs`. `<i>` is auto-incremented.
 
 You can control the default location of your scripts by setting the variables
 
