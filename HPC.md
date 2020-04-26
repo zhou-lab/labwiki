@@ -7,9 +7,10 @@ Table of Contents
       * [Environment Variables](#environment-variables)
       * [Symlinks](#symlinks)
       * [Job Submission and Monitoring](#job-submission-and-monitoring)
-      * [Oneline Convenience Function](#oneline-convenience-function)
+      * [Script-less Submission](#script-less-submission)
+      * [pbsgen-style submission](#pbsgen-style-submission)
       * [Keep Job Running After Disconnection](#keep-job-running-after-disconnection)
-      * [Submission Script](#submission-script)
+      * [Submission Script from Scratch](#submission-script-from-scratch)
       * [Project Organization](#project-organization)
       * [Project Documentation](#project-documentation)
       * [Two Shared Lab Folders](#two-shared-lab-folders)
@@ -19,7 +20,7 @@ Table of Contents
       * [Reference Genome Folder](#reference-genome-folder)
       * [Useful Tools](#useful-tools)
 
-<!-- Added by: zhouw3, at: Sat Apr 25 17:48:17 EDT 2020 -->
+<!-- Added by: zhouw3, at: Sat Apr 25 21:08:02 EDT 2020 -->
 
 <!--te-->
 
@@ -80,6 +81,10 @@ alias qstatall='qstat -u "*" | less'  # check all job status
 alias qstatallrun='qstat -u "*" -s r | less' # check all user jobs
 alias qhost='qhost | less' # check queue status
 alias qwatch="watch qstat" # keep monitoring jobs
+alias qsub1="qsub -pe smp 1 -l m_mem_free=5G -l h_vmem=5G"
+alias qsub4="qsub -pe smp 4 -l m_mem_free=5G -l h_vmem=5G"
+alias qsub12="qsub -pe smp 12 -l m_mem_free=5G -l h_vmem=5G"
+alias qsub24="qsub -pe smp 24 -l m_mem_free=5G -l h_vmem=5G"
 export HPCUSERNAME=zhouw3
 qdelall
 ```
@@ -96,25 +101,63 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
-## Oneline Convenience Function
+## Script-less Submission
 
-Other functions that makes job submission easier `qsub24`, `qsub12`, `qsub4`, `qsub1` (for 24, 12, 4, and 1 core(s)). You can copy paste your command and it will auto-generate submission script and submit. All needs be ended with `QSEND\n)"`, see an example below,
+Notice in the examples below `qsub` can be replaced with `qsub1`, `qsub4`, `qsub12` and `qsub24`.
+
+Here string
+```
+qsub12 <<'EOF'
+<your command>
+EOF
+```
+
+Pipe in
+```
+cat <<'EOF' | qsub
+<your command>
+EOF
+```
+You can also pipe into both a file and qsub (so that you keep a record)
+```
+cat <<'EOF' | tee <your file name> | qsub
+<your command>
+EOF
+```
+
+you can also use `echo` if it's just one line.
+```
+echo <your command> | qsub
+```
+
+For R-command, you can do
+```
+qsub <<'EOF'
+Rscript <<'EOF2'
+<your R command>
+EOF2
+EOF
+```
+
+## pbsgen-style submission
+
+This is when you need more control over the pbs file generated. Just like qsub series, we have `psub` series: `psub24`, `psub12`, `psub4`, `psub1` (for 24, 12, 4, and 1 core(s)). You can copy paste your command and it will auto-generate submission script and submit. All needs be ended with `PSEND\n)"`, see an example below,
 
 ```
-qsub24
+psub24
 <your bash code>
-QSEND
+PSEND
 )"
 ```
-Note you cannot have space before `QSEND` and `)"` needs to be on the second line.
+Note you cannot have space before `PSEND` and `)"` needs to be on the second line.
 
-Some functions to allow R jobs easier `qsubR24`, `qsubR12`, `qsubR4`, `qsubR1` (for 24, 12, 4, and 1 core(s)). All needs be ended with `QSREND\nQSEND\n)"', see the following example,
+Some functions to allow R jobs easier `psubR24`, `psubR12`, `psubR4`, `psubR1` (for 24, 12, 4, and 1 core(s)). All needs be ended with `PSREND\nPSEND\n)"`, see the following example,
 
 ```
-qsubR4
+psubR4
 <your R code>
-QSREND
-QSEND
+PSREND
+PSEND
 )"
 ```
 
