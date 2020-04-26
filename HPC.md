@@ -141,7 +141,7 @@ EOF
 
 ## pbsgen-style submission
 
-This is when you need more control over the pbs file generated, see an example below.
+pbsgen gives more control over the pbs file generated, an example:
 
 ```
 cat <<'EOF' | pbsgen -submit
@@ -149,7 +149,7 @@ cat <<'EOF' | pbsgen -submit
 EOF
 ```
 
-Here is the example for R
+An example for R
 
 ```
 cat <<'EOF' | pbsgen -submit
@@ -159,14 +159,14 @@ EOF2
 EOF
 ```
 
-Some common options:
+Common options:
 
 - `-submit`: submit the generated script
 - `-ppn 4`: number of cores (in this case 4 cores, default to 1)
 - `-name`: name of the pbs file and job name. if not an absolute path, use current working directory. if absolute path, the basename will be used for job name.
 - `-pbsdir`: name of the default pbs folder. if `$PBSDIR` is not set, use current working directory as default, otherwise use `$PBSDIR` as default.
 
-Example 1: You just don't care where the script file is generated
+Example 1: You just don't care where the script file is
 
 ```
 pbsgen "echo Hello world"
@@ -174,28 +174,28 @@ pbsgen "echo Hello world"
 
 This creates job `j<i>_$NAMEROOT` at`$PBSDIR/j<i>_$NAMEROOT.pbs`. `<i>` is auto-incremented.
 
-Example 2: You want specify job name and script name but don't care where.
+Example 2: You want specify job name but don't care where.
 ```
 pbsgen "echo Hello World" -name Pearland
 ```
 
 This creates job `Pearland` at `$PBSDIR/Pearland.pbs`
 
-Example 3: You want to specify both path and job name.
+Example 3: You want to specify both script path and job name.
 ```
 pbsgen "echo Hello World" -name ~/test/Pearland
 ```
 
 This creates job `Pearland` at `~/test/Pearland.pbs`
 
-Example 4: You want script to be generated at a given location (like current dir) but don't care name
+Example 4: You want script folder (like current dir) but don't care name
 ```
 pbsgen "echo Hello World" -pbsdir .
 ```
 
 This creates job `j<i>_$NAMEROOT` at`./j<i>_$NAMEROOT.pbs`. `<i>` is auto-incremented.
 
-You can control the default location of your scripts by setting the variables
+Environment variables control the defaults
 
 ```
 # change this if you want to just change the folder where pbs file is auto-generated
@@ -204,7 +204,7 @@ export PBSDIR=/mnt/isilon/zhoulab/tmp/pbs
 export NAMEROOT=LabJob
 ```
 
-You can customize these in your `~/.bashrc` file after loading the zhoulab file.
+Customize these in your `~/.bashrc` file after loading the zhoulab file.
 
 ## Keep Job Running After Disconnection
 
