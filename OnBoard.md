@@ -1,4 +1,4 @@
-### Apply for Digital Identity
+### Apply for Digital Identity (You can skip if you already have digital identity)
 
 - Go to HR service portal [https://chop.service-now.com/hrportal](https://chop.service-now.com/hrportal)
 - Click "create a position"
