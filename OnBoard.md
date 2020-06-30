@@ -66,6 +66,12 @@ ssh-keygen -t rsa
 
 Append the content of `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys`
 
+### Apply for external web access
+
+- Go to cirrus portal (https://cirrus.research.chop.edu)
+- Add CostCenter Activity for VM Provisioning (if the group is not added yet)
+- "Request Access to CostCenter Activity for VM Provisioning" in cirrus
+- "Request New Virtual Machine" in cirrus, you won't see it until costcenter access is approved.
 
 ### HPC Set up Environment
 
