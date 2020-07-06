@@ -112,6 +112,14 @@ Submit multiple jobs with script
 find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
 ```
 
+Find out all jobs running and run
+
+```
+qacct -j -o zhouw3
+qacct -j -o zhouw3 -d 1 # just since yesterday
+```
+
+
 ## Script-less Submission
 
 Notice in the examples below `qsub` can be replaced with `qsub1`, `qsub4`, `qsub12` and `qsub24`.
