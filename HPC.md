@@ -302,6 +302,13 @@ transfer directory from HPC to local:
 scp -r ~/path/on/local username@respublica.research.chop.edu:/path/on/hpc/ 
 ```
 
+## use modules
+```
+module avail
+modulefiles_list
+module load gcc/6.4.0
+```
+
 ## Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
