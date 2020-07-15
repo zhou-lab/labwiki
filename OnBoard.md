@@ -14,6 +14,7 @@
 - fill out the form and submit (take about a week to get approved)
      - Address: 3501 Civic Center Blvd, Philadelphia 19104
      - Building: CTRB
+     - payment methods: choose Grant, then 7229660000 (please use your activity number if not part of Zhou lab)
      - Department: Pathology
      - Room/Cube: 9300
      - Floor: 9
@@ -31,11 +32,11 @@ ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
 Cirrus
 [https://www.research.chop.edu/cirrus](https://www.research.chop.edu/cirrus)
 - Click "Respublica Access Request"
-- put cost center (22105) and activity (7229660000) submit
+- put cost center (22105) and activity (7229660000) submit (please use your activity number if not part of Zhou lab)
 - Click "Request Fileshare Access"
 - Add yourself or people
 - Choose "ReadWrite"
-- add both zhou_lab and zhoulab
+- add both zhou_lab and zhoulab (please use your fileshare if not part of Zhou lab)
 
 ### HPC Connections
 
