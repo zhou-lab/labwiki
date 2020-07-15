@@ -29,7 +29,7 @@ ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
 
 - Go to 
 Cirrus
-[https://ris.research.chop.edu/systems/cirrus](https://ris.research.chop.edu/systems/cirrus)
+[https://www.research.chop.edu/cirrus](https://www.research.chop.edu/cirrus)
 - Click "Respublica Access Request"
 - put cost center (22105) and activity (7229660000) submit
 - Click "Request Fileshare Access"
