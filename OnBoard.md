@@ -15,6 +15,7 @@
      - Address: 3501 Civic Center Blvd, Philadelphia 19104
      - Building: CTRB
      - Department: Pathology
+     - Room/Cube: 9300
      - Floor: 9
      - Business justification: Access HPC from remote location
      - Internet Provider: Other (if not known)
