@@ -10,7 +10,7 @@
 
 - Apply on "Service Now"
 [https://chop.service-now.com/esp](https://chop.service-now.com/esp)
-- search "remote access"
+- search "remote access (Soft Token)"
 - fill out the form and submit (take about a week to get approved)
      - Address: 3501 Civic Center Blvd, Philadelphia 19104
      - Building: CTRB
