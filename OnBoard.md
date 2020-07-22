@@ -6,7 +6,7 @@
 - Non-traditional Personnel (NTP) if applicable
 - Export control if applicable (OIVS, contact Adrienne Gigantino).
 
-### Set up Remote Access
+### Set up Remote Access (VPN through soft-token)
 
 - Apply on "Service Now"
 [https://chop.service-now.com/esp](https://chop.service-now.com/esp)
@@ -21,6 +21,7 @@
      - Business justification: Access HPC from remote location
      - Internet Provider: Other (if not known)
 - download 'Entrust IdentityGuard Mobile' on your phone, and set up following [https://ishelp.chop.edu/](https://ishelp.chop.edu/)
+or try instruction on this page [https://at.chop.edu/is/service-desk/community-resources/chopanywhere/entrust-remote-authentication](https://at.chop.edu/is/service-desk/community-resources/chopanywhere/entrust-remote-authentication)
 - install 'Cisco AnyConnect' on your PC/Mac [https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html](https://www.cisco.com/c/en/us/support/security/anyconnect-secure-mobility-client/tsd-products-support-series-home.html) or [https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp](https://software.cisco.com/download/home/286281283/type/282364313/release/4.8.02042?i=!pp). Drexel student can also get a copy from the University.
 - Put 'remote.chop.edu' Cisco AnyConnect, when prompted, put your CHOP ID on the first line, what you get from 'Entrust' for Passcode on the second line, and your CHOP password for the 2nd passcode on the third.
 
