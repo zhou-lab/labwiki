@@ -9,7 +9,7 @@ doawk() { awk '{if($5<0)$5=0; print;}' $1; }
 export -f doawk
 
 ## five column samples packed to float.int
-cat 5col | head -5 | parallel -j 20 'f={}; b=$(basename ${f%.bed.gz}); bedtools intersect -a /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz -b {} -sorted -loj | cut -f1-3,8,9 | doawk | tbmate pack -s float.int -m /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz - hg19_tbk/$b.tbk'
+cat 5col | parallel -j 20 'f={}; b=$(basename ${f%.bed.gz}); bedtools intersect -a /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz -b {} -sorted -loj | cut -f1-3,8,9 | doawk | tbmate pack -s float.int -m /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz - hg19_tbk/$b.tbk'
 
 ## four column samples packed to float
 cat 4col | parallel -j 20 'f={}; b=$(basename ${f%.bed.gz}); bedtools intersect -a /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz -b {} -sorted -loj | cut -f1-3,8 | doawk | tbmate pack -s float -m /mnt/isilon/zhou_lab/projects/20191221_references/hg19/annotation/cpg/idx.gz - hg19_tbk/$b.tbk'
