@@ -1,5 +1,5 @@
 ###################################
-## version 1 with name cleaning
+## version 1 without name cleaning
 ###################################
 library(sesame)
 source('https://raw.githubusercontent.com/zhou-lab/tbmate/master/scripts/tbmate.R')
