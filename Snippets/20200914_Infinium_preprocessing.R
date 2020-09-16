@@ -22,7 +22,7 @@ tmp <- mclapply(seq_along(pfxs), function(i) {
              out_fname = names(pfxs)[i], # str_split(names(pfxs)[i],'_')[[1]][1], 
              idx_fname = sprintf('%s/%s/%s.idx.gz', idx_dir, sset@platform, sset@platform), 
              dtype='FLOAT_FLOAT')
-} , mc.cores=20)
+} , mc.cores=20, mc.preschedule = FALSE)
 
 ###################################
 ## version 2 with name cleaning
@@ -44,7 +44,7 @@ tmp <- mclapply(seq_along(pfxs), function(i) {
              out_fname = str_split(names(pfxs)[i],'_')[[1]][1], 
              idx_fname = sprintf('%s/%s/%s.idx.gz', idx_dir, sset@platform, sset@platform), 
              dtype='FLOAT_FLOAT')
-} , mc.cores=20)
+} , mc.cores=20, mc.preschedule = FALSE)
 
 
 ###################################
@@ -63,7 +63,7 @@ tmp <- mclapply(seq_len(ncol(betas)), function(i) {
              out_fname = colnames(betas)[i], 
              idx_fname = idx_fname, 
              dtype='FLOAT')
-}, mc.cores=20)
+}, mc.cores=20, mc.preschedule = FALSE)
 
 
 
