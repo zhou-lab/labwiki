@@ -27,6 +27,6 @@ deblood <- function(x) {
     nonblood_purity = max(purity0, purity1, na.rm=T)
     list(
         nonblood_purity = nonblood_purity,
-        x = x - bloodMean * (1-nonblood_purity) / nonblood_purity
+        x = (x - bloodMean * (1-nonblood_purity)) / nonblood_purity
     )
 }
