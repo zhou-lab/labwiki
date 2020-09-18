@@ -22,7 +22,7 @@ tmp <- mclapply(seq_along(pfxs), function(i) {
              out_fname = names(pfxs)[i], # str_split(names(pfxs)[i],'_')[[1]][1], 
              idx_fname = sprintf('%s/%s/%s.idx.gz', idx_dir, sset@platform, sset@platform), 
              dtype='FLOAT_FLOAT')
-} , mc.cores=20, mc.preschedule = FALSE)
+} , mc.cores=20)
 
 ###################################
 ## version 2 with name cleaning
@@ -44,7 +44,7 @@ tmp <- mclapply(seq_along(pfxs), function(i) {
              out_fname = str_split(names(pfxs)[i],'_')[[1]][1], 
              idx_fname = sprintf('%s/%s/%s.idx.gz', idx_dir, sset@platform, sset@platform), 
              dtype='FLOAT_FLOAT')
-} , mc.cores=20, mc.preschedule = FALSE)
+} , mc.cores=20)
 
 
 ###################################
@@ -63,8 +63,25 @@ tmp <- mclapply(seq_len(ncol(betas)), function(i) {
              out_fname = colnames(betas)[i], 
              idx_fname = idx_fname, 
              dtype='FLOAT')
-}, mc.cores=20, mc.preschedule = FALSE)
+}, mc.cores=20)
 
 
+###################################
+## version 4 beta values only EPIC
+###################################
+library(parallel)
+source('https://raw.githubusercontent.com/zhou-lab/tbmate/master/scripts/tbmate.R')
+# base_dir <- '/mnt/isilon/zhou_lab/projects/20191212_GEO_datasets/GSE41826'
+idx_fname  <- '/mnt/isilon/zhou_lab/projects/20191221_references/InfiniumArray/EPIC/EPIC.idx.gz'
+
+# load('legacy/betas.rda')
+
+tmp <- mclapply(seq_len(ncol(betas)), function(i) {
+    tbk_pack(betas[,i],
+             out_dir = sprintf('%s/tbk_EPIC/', base_dir), 
+             out_fname = colnames(betas)[i], 
+             idx_fname = idx_fname, 
+             dtype='FLOAT')
+}, mc.cores=20)
 
 
