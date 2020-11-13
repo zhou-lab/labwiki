@@ -98,3 +98,13 @@ Setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/mast
 - Go to [https://connect.chop.edu](connect.chop.edu)
 - Put your user name, password and Entrust token (see above for how to get that)
 - click on Desktop and you should be able to access CHOP server using terminal.
+
+### Coupa Requisition (lab purchase)
+
+The links below will assist you in updating your default settings, and provide additional Coupa job aids.
+
+Coupa Default Settings: https://chop.service-now.com/esp?id=kb_article&sys_id=199866f0dbe6c41c3254c3d23996190b
+
+Coupa Job Aids:  https://chop.service-now.com/esp?id=kb_article&sys_id=4001c699dbe744d0682b9b3c8a961990
+
+Additional Coupa Training: You may login to mycareer@CHOP, click ‘Learning’, and search for Coupa Requester. Here you will be able to complete the online Coupa training modules.
