@@ -6,6 +6,11 @@
 - Non-traditional Personnel (NTP) if applicable
 - Export control if applicable (OIVS, contact Adrienne Gigantino).
 
+### Apply for a PennKey
+
+PennKey lets you download paper
+https://www.research.chop.edu/services/chop-pennkey-administration
+
 ### Set up Remote Access (VPN through soft-token)
 
 - Apply on "Service Now"
@@ -14,7 +19,7 @@
 - fill out the form and submit (take about a week to get approved)
      - Address: 3501 Civic Center Blvd, Philadelphia 19104
      - Building: CTRB
-     - payment methods: choose Grant, then 7229660000 (please use your activity number if not part of Zhou lab)
+     - payment methods: choose Grant, then ask your boss for the activity number
      - Department: Pathology
      - Room/Cube: 9300
      - Floor: 9
@@ -33,7 +38,7 @@ ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
 Cirrus
 [https://www.research.chop.edu/cirrus](https://www.research.chop.edu/cirrus)
 - Click "Respublica Access Request"
-- put cost center (7229660000) and activity (7229660000) submit (please use your activity number if not part of Zhou lab)
+- put your boss's activity number (ask them) and submit
 - Click "Request Fileshare Access"
 - Add yourself or people
 - Choose "ReadWrite"
