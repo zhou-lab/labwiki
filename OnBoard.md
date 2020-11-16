@@ -115,6 +115,8 @@ Setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/mast
 
 The links below will assist you in updating your default settings, and provide additional Coupa job aids.
 
+https://at.chop.edu/supply-chain/coupa
+
 Coupa Default Settings: https://chop.service-now.com/esp?id=kb_article&sys_id=199866f0dbe6c41c3254c3d23996190b
 
 Coupa Job Aids:  https://chop.service-now.com/esp?id=kb_article&sys_id=4001c699dbe744d0682b9b3c8a961990
