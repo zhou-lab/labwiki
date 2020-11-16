@@ -10,6 +10,9 @@
 
 PennKey lets you download paper
 https://www.research.chop.edu/services/chop-pennkey-administration
+Create a bookmark for
+```javascript:void(location.href="https://proxy.library.upenn.edu/login?url="+location.href)```
+Click that bookmark everytime you want to access full text of a paper.
 
 ### Set up Remote Access (VPN through soft-token)
 
