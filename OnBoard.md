@@ -33,7 +33,7 @@ ask CHOP help desk (215-590-4357 or 4-HELP from campus) if you have question
 Cirrus
 [https://www.research.chop.edu/cirrus](https://www.research.chop.edu/cirrus)
 - Click "Respublica Access Request"
-- put cost center (22105) and activity (7229660000) submit (please use your activity number if not part of Zhou lab)
+- put cost center (7229660000) and activity (7229660000) submit (please use your activity number if not part of Zhou lab)
 - Click "Request Fileshare Access"
 - Add yourself or people
 - Choose "ReadWrite"
