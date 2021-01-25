@@ -17,6 +17,7 @@ Table of Contents
       * [Legacy Data Folders](#legacy-data-folders)
       * [How to Mount Network Drives?](#how-to-mount-network-drives)
       * [Transfer files from/to HPC](#transfer-files-fromto-hpc)
+      * [Ask for new software to be installed](#ask-for-new-software-to-be-installed)
       * [Reference Genome Folder](#reference-genome-folder)
       * [Useful Tools](#useful-tools)
 
