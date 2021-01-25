@@ -316,6 +316,14 @@ module load gcc/6.4.0
 
 see [https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Software](https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Software)
 
+## Ask for new software to be installed
+
+go to [service portal](https://chop.service-now.com/esp)
+
+search "other request", click on "other request"
+
+fill out the form, describe the package you would like installed, then "Order Now"
+
 ## Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
