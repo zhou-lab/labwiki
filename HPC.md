@@ -24,6 +24,11 @@ Table of Contents
 
 <!--te-->
 
+## Use VDI
+
+[https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
+
+
 ## Unix Tutorial
 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
