@@ -314,6 +314,8 @@ modulefiles_list
 module load gcc/6.4.0
 ```
 
+see [https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Software](https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Software)
+
 ## Reference Genome Folder
 
 References genome is shared among users. Let's all agree to use the following link for now.
