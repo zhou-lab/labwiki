@@ -237,7 +237,7 @@ Use `screen` or `tmux` (better for UGE compatibility) and run everything inside.
 
 - `F2` new panel
 - `F11`/`F12` switch left and right
-- `screen -r(sr)` reattach
+- `screen -r(sr)` or `tmux attach` reattach
 - `Ctrl-a d` detach
 - `Ctrl-a K(cap K)` kill the current window
 - `Ctrl-a [` copy mode and use `shift+up/down` to scroll up and down
