@@ -51,7 +51,14 @@ Cirrus
 - Choose "ReadWrite"
 - add both zhou_lab and zhoulab (please use your fileshare if not part of Zhou lab)
 
-### HPC Connections
+### HPC connections (VDI)
+
+[https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
+
+You will receive an IP to your CHOP email address.
+You should use the IP and keep the instance live for as long as possible (only disconnect).
+
+### HPC Connections (Old way, retired)
 
 ```
 ssh <CHOPID>@respublica.research.chop.edu
