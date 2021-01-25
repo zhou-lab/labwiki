@@ -51,7 +51,7 @@ Cirrus
 - Choose "ReadWrite"
 - add both zhou_lab and zhoulab (please use your fileshare if not part of Zhou lab)
 
-### HPC connections (VDI)
+### HPC connections (VDI, recommended)
 
 [https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
 
