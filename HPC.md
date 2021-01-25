@@ -233,7 +233,7 @@ Customize these in your `~/.bashrc` file after loading the zhoulab file.
 
 ## Keep Job Running After Disconnection
 
-Use `screen` and run everything inside.
+Use `screen` or `tmux` (better for UGE compatibility) and run everything inside.
 
 - `F2` new panel
 - `F11`/`F12` switch left and right
