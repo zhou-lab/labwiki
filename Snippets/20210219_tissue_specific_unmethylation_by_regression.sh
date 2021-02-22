@@ -26,5 +26,8 @@ EOF
 ##-------------
 parallel -j 20 'zcat /mnt/isilon/zhoulab/labprojects/20210204_methSignature_mouse/20210220_mouse_tissueRegression.tsv.gz | python /mnt/isilon/zhoulab/labtools/pyutils/wzsearch_methsignature2.py -u {} --fm 0.5 -m - >/mnt/isilon/zhoulab/labprojects/20210204_methSignature_mouse/20210220_mouse_tissueRegression.tsv.gz_{}.tsv' ::: blood boneMarrow colon glia  keratinocyte liver neuron olfactoryBulb pancreas spleen
 
+## these need fine tuning
+##-------------
+## brain, face, forebrain, hindbrain, midbrain, heart, intestine, kidney, limb, lung, neuralTube, stomach
 
 
