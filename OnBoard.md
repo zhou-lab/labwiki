@@ -102,6 +102,19 @@ Append the content of `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_key
 - "Request New Virtual Machine" in cirrus, you won't see it until costcenter access is approved.
 (https://www.research.chop.edu/sites/default/files/web/sites/default/files/pdfs/cirrus/Request_New_Virtual_Machine.pdf)
 
+ssh instruction (only work for zhoulab)
+
+`ssh reslnzhoupub01`
+
+HTML folder
+
+`/data/www/html/`
+
+Public domain name
+
+`http://zhouserver.research.chop.edu/`
+
+
 ### HPC Set up Environment
 
 Put
