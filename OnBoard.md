@@ -97,9 +97,10 @@ Append the content of `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_key
 ### Apply for external web access
 
 - Go to cirrus portal (https://cirrus.research.chop.edu)
-- Add CostCenter Activity for VM Provisioning (if the group is not added yet)
+- Add CostCenter Activity for VM Provisioning (if the group is not added yet) (https://www.research.chop.edu/sites/default/files/web/sites/default/files/pdfs/cirrus/Request_Access_to_CostCenter_Activity_for_VM_Provisioning.pdf)
 - "Request Access to CostCenter Activity for VM Provisioning" in cirrus
 - "Request New Virtual Machine" in cirrus, you won't see it until costcenter access is approved.
+(https://www.research.chop.edu/sites/default/files/web/sites/default/files/pdfs/cirrus/Request_New_Virtual_Machine.pdf)
 
 ### HPC Set up Environment
 
