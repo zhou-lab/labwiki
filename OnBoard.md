@@ -94,7 +94,7 @@ ssh-keygen -t rsa
 
 Append the content of `~/.ssh/id_rsa.pub` to the remote's `~/.ssh/authorized_keys`
 
-### Apply for external web access
+### Apply for external web host
 
 - Go to cirrus portal (https://cirrus.research.chop.edu)
 - Add CostCenter Activity for VM Provisioning (if the group is not added yet) (https://www.research.chop.edu/sites/default/files/web/sites/default/files/pdfs/cirrus/Request_Access_to_CostCenter_Activity_for_VM_Provisioning.pdf)
