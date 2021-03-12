@@ -29,6 +29,12 @@ Table of Contents
 
 [https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
 
+The new cluster login-node pool is **RES-RHEL-HPC-2**
+
+The documentation (including purpose and scope of the change) is here: https://wiki.chop.edu/display/RISUD/Respublica+Rebuild+2021
+I recommend you view the video and page here: https://wiki.chop.edu/display/RISUD/%28BETA%29+Moving+From+UGE+-%3E+Slurm
+Full slurm scheduling docs for our cluster: https://wiki.chop.edu/pages/viewpage.action?pageId=261751857
+The replacement for jupyterhub is documented here: https://wiki.chop.edu/pages/viewpage.action?pageId=261751861
 
 ## Unix Tutorial
 
