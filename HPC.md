@@ -27,9 +27,12 @@ Table of Contents
 
 ## Use VDI
 
+Follow the following instruction to install VMWare
 [https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
 
 The new cluster login-node pool is **RES-RHEL-HPC-2**
+
+You don't need to use the GUI. Once you request the instance, you can disconnect (not logout or restart). The system will send you an email with server name. Use ssh to login that server.
 
 The documentation (including purpose and scope of the change) is here: https://wiki.chop.edu/display/RISUD/Respublica+Rebuild+2021
 I recommend you view the video and page here: https://wiki.chop.edu/display/RISUD/%28BETA%29+Moving+From+UGE+-%3E+Slurm
