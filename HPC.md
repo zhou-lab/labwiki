@@ -91,25 +91,24 @@ We have the follow repo cloned to `/mnt/isilon/zhoulab/labpipelines` for job sub
 
 Alias are defined in `/mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab` for quick job submission, deletion, monitoring
 
+These are just mnemonics for those from torque/UGE environment
 ```
-alias qsubi='qlogin -q interactive.q' # interactive job
-alias qstatall='qstat -u "*" | less'  # check all job status
-alias qstatallrun='qstat -u "*" -s r | less' # check all user jobs
-alias qhost='qhost | less' # check queue status
-alias qwatch="watch qstat" # keep monitoring jobs
-alias qsub1="qsub -pe smp 1 -l m_mem_free=5G -l h_vmem=5G"
-alias qsub4="qsub -pe smp 4 -l m_mem_free=5G -l h_vmem=5G"
-alias qsub12="qsub -pe smp 12 -l m_mem_free=5G -l h_vmem=5G"
-alias qsub24="qsub -pe smp 24 -l m_mem_free=5G -l h_vmem=5G"
+alias qstat="squeue --me"
+alias qwatch="watch squeue --me"
+alias qsubi="srun --mem=20G -c 4 -t 12:00:00 --pty bash"
+alias qsub="sbatch"
+alias qacct="sacct -j"
+alias qhost="sinfo"
+alias qdel="scancel"
+
 export HPCUSERNAME=zhouw3
-qdelall
 ```
 
 qstat on running jobs only
 
 ```
-qstatz
-qwatchz
+alias qstatz="squeue --me -t R"
+alias qwatchz="watch squeue --me -t R"
 ```
 
 Execute one job (more about pbsgen below)
@@ -121,14 +120,14 @@ pbsgen "<your command>" -submit
 Submit multiple jobs with script
 
 ```
-find folder/ -type f -name '*.pbs' | sort | xargs -I {} qsub {}
+find folder/ -type f -name '*.pbs' | sort | xargs -I {} sbatch {}
 ```
 
 Find out all jobs running and run
 
 ```
-qacct -j -o zhouw3
-qacct -j -o zhouw3 -d 1 # just since yesterday
+sacct -j -o zhouw3
+sacct -j -o zhouw3 -d 1 # just since yesterday
 ```
 
 
@@ -145,20 +144,20 @@ EOF
 
 Pipe in
 ```
-cat <<'EOF' | qsub
+cat <<'EOF' | sbatch
 <your command>
 EOF
 ```
-You can also pipe into both a file and qsub (so that you keep a record)
+You can also pipe into both a file and sbatch (so that you keep a record)
 ```
-cat <<'EOF' | tee <your file name> | qsub
+cat <<'EOF' | tee <your file name> | sbatch
 <your command>
 EOF
 ```
 
 you can also use `echo` if it's just one line.
 ```
-echo <your command> | qsub
+echo <your command> | sbatch
 ```
 
 For R-command, you can do
