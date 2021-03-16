@@ -47,6 +47,9 @@ Specs of Respublica, how many nodes, cpus.
 
 [https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Basic+Cluster+Information](https://wiki.chop.edu/pages/viewpage.action?spaceKey=RISUD&title=Basic+Cluster+Information)
 
+More advanced bash scripting guide
+[https://tldp.org/LDP/abs/html/](https://tldp.org/LDP/abs/html/)
+
 ## Environment Variables
 
 Append
