@@ -1,12 +1,13 @@
 # usage:
-# sd hpc5:~/a/b/c # sync from remote to local
+# sd hpc:~/a/b/c # sync from remote to local
 # sd ~/a/b/c # sync from local to remote
 
 function sd() {
+  # please change this to your user name
   local_home="/Users/zhouw3"
   remote_home="/home/zhouw3"
-  hpc_name="hpc5"
-
+  hpc_name="hpc" # set this up in your .ssh/config
+  
   from=$1
   if [[ $from =~ ^$local_home ]]; then # from local to remote
     to=${from/$local_home/$hpc_name":"$remote_home}
