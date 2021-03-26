@@ -53,9 +53,9 @@ function sd() {
 
   if [[ $from =~ ^$LOCAL_HOME ]]; then
     ssh $HPC_NAME mkdir -p $(dirname ${to/$hpc_name":"/})
-    scp $from $to
+    rsync -av --update $from $to
   elif [[ $from =~ ^$HPC_NAME ]]; then
     mkdir -p $(dirname $to)
-    scp $from $to
+    rsync -av --update $from $to
   fi
 }
