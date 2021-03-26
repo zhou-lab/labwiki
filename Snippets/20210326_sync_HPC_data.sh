@@ -1,15 +1,24 @@
-# USAGE
+# sf means "Sync From"
 
-## infer direction by folder names
+# Ex1: remote > local, because /mnt/isilon is a server path
+# from /mnt/isilon/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
+# sd /mnt/isilon/zhoulab/labprojects/a/b/c
 
-## remote > local
-# sd /mnt/isilon/a/b/c
-# sd /home/zhouw3/a/b/c
-# sd hpc:~/a/b/c
+# Ex2: remote > local, because /home/zhouw3 is a server path
+# from /mnt/isilon/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
+# sd /home/zhouw3/zhoulab/labprojects/a/b/c
 
-## local > remote
-# sd /Users/zhouw3/a/b/c
-# sd ~/a/b/c
+# Ex3: remote > local, because of explicit r:
+# from ~/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
+# sd r:~/zhoulab/labprojects/a/b/c
+
+# Ex4: local > remote, because /Users/zhouw3 is a local path
+# from /User/zhouw3/zhoulab/labprojects/a/b/c to /home/zhouw3/zhoulab/labprojects/a/b/c
+# sd /Users/zhouw3/zhoulab/labprojects/a/b/c
+
+# Ex5: local > remote, default if there is no way to tell direction
+# from ~/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
+# sd ~/zhoulab/labprojects/a/b/c
 
 ### INSTALLATION
 ### insert the following to your .zshrc/.bashrc
@@ -20,7 +29,7 @@
 # source <(curl -s https://raw.githubusercontent.com/zhou-lab/labwiki/master/Snippets/20210326_sync_HPC_data.sh)
 ### ----------------
 
-function sd() {
+function sf() {
   [[ -z "$LOCAL_HOME" ]] && LOCAL_HOME="/Users/zhouw3"
   [[ -z "$REMOTE_HOME" ]] && REMOTE_HOME="/home/zhouw3"
   [[ -z "$REMOTE_HOME2" ]] && REMOTE_HOME2="/mnt/isilon"
@@ -35,7 +44,8 @@ function sd() {
   elif [[ $from =~ ^$REMOTE_HOME ]]; then # from remote to local
     to=${from/$REMOTE_HOME/$LOCAL_HOME}
     from=$HPC_NAME":"$from
-  elif [[ $from =~ ^$HPC_NAME ]]; then # from remote to local
+  elif [[ $from =~ ^r: ]]; then # from remote to local
+    from=${from/r:/$HPC_NAME":"}
     from=${from/\~/$REMOTE_HOME}
     to=${from/$HPC_NAME":"/}
     to=${to/#\~/$LOCAL_HOME}
