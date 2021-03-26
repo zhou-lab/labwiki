@@ -2,23 +2,23 @@
 
 # Ex1: remote > local, because /mnt/isilon is a server path
 # from /mnt/isilon/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
-# sd /mnt/isilon/zhoulab/labprojects/a/b/c
+# sf /mnt/isilon/zhoulab/labprojects/a/b/c
 
 # Ex2: remote > local, because /home/zhouw3 is a server path
 # from /mnt/isilon/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
-# sd /home/zhouw3/zhoulab/labprojects/a/b/c
+# sf /home/zhouw3/zhoulab/labprojects/a/b/c
 
 # Ex3: remote > local, because of explicit r:
 # from ~/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
-# sd r:~/zhoulab/labprojects/a/b/c
+# sf r:~/zhoulab/labprojects/a/b/c
 
 # Ex4: local > remote, because /Users/zhouw3 is a local path
 # from /User/zhouw3/zhoulab/labprojects/a/b/c to /home/zhouw3/zhoulab/labprojects/a/b/c
-# sd /Users/zhouw3/zhoulab/labprojects/a/b/c
+# sf /Users/zhouw3/zhoulab/labprojects/a/b/c
 
 # Ex5: local > remote, default if there is no way to tell direction
 # from ~/zhoulab/labprojects/a/b/c to ~/zhoulab/labprojects/a/b/c
-# sd ~/zhoulab/labprojects/a/b/c
+# sf ~/zhoulab/labprojects/a/b/c
 
 ### INSTALLATION
 ### insert the following to your .zshrc/.bashrc
