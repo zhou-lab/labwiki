@@ -1,6 +1,8 @@
 library(caret)
 library(ggplot2)
 
+## set up sf here https://github.com/zhou-lab/labwiki/blob/master/Snippets/20210326_sync_HPC_data.sh
+
 ## sf r:~/samplesheets/2021/20210226_MouseArray_SampleTableV4_clock.xlsx
 ## sample sheets, should always be at ~/samplesheets
 meta = read_excel('~/samplesheets/2021/20210226_MouseArray_SampleTableV4_clock.xlsx') %>% dplyr::filter(Tumor_vs_Normal == "Normal") %>% dplyr::filter(Issue == "NA")
