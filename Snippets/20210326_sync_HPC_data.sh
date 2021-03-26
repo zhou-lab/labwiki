@@ -1,35 +1,47 @@
-# usage:
-# sd hpc:~/a/b/c # sync from remote to local
-# sd ~/a/b/c # sync from local to remote
+# USAGE
 
-# sd /mnt/isilon/a/b/c # remote > local
-# sd ~/a/b/c local > remote
+## remote > local (tell direction by folder names
+# sd /mnt/isilon/a/b/c
+# sd /home/zhouw3/a/b/c
+# sd hpc:~/a/b/c
+
+## local > remote
+# sd /Users/zhouw3/a/b/c
+# sd ~/a/b/c
+
+### INSTALLATION
+### insert the following to your .zshrc/.bashrc
+### ----------------
+# LOCAL_HOME="/Users/zhouw3"
+# REMOTE_HOME="/home/zhouw3"
+# HPC_NAME="hpc5"
+# source <(curl -s https://raw.githubusercontent.com/zhou-lab/labwiki/master/Snippets/20210326_sync_HPC_data.sh)
+### ----------------
 
 function sd() {
-  # please change this to your user name
-  local_home="/Users/zhouw3"
-  remote_home="/home/zhouw3"
-  remote_home2="/mnt/isilon"
-  hpc_name="hpc" # set this up in your .ssh/config
-  
+  [[ -z "$LOCAL_HOME" ]] && LOCAL_HOME="/Users/zhouw3"
+  [[ -z "$REMOTE_HOME" ]] && REMOTE_HOME="/home/zhouw3"
+  [[ -z "$REMOTE_HOME2" ]] && REMOTE_HOME2="/mnt/isilon"
+  [[ -z "$HPC_NAME" ]] && HPC_NAME="hpc"
+
   from=$1
-  if [[ $from =~ ^$local_home ]]; then # from local to remote
-    to=${from/$local_home/$hpc_name":"$remote_home}
-  elif [[ $from =~ ^$remote_home2 ]]; then # from remote to local
-    from=$hpc_name":"$from
-    to={$from/$remote_home2/$local_home}
-  elif [[ $from =~ ^$remote_home ]]; then # from remote to local
-    from=$hpc_name":"$from
-    to=${from/$remote_home/$local_home}
-  elif [[ $from =~ ^$hpc_name ]]; then # from remote to local
-    from=${from/\~/$remote_home}
-    to=${from/$hpc_name":"/}
-    to=${to/#\~/$local_home}
-    to=${to/$remote_home/$local_home}
+  if [[ $from =~ ^$LOCAL_HOME ]]; then # from local to remote
+    to=${from/$LOCAL_HOME/$HPC_NAME":"$REMOTE_HOME}
+  elif [[ $from =~ ^$REMOTE_HOME2 ]]; then # from remote to local
+    from=$HPC_NAME":"$from
+    to={$from/$REMOTE_HOME2/$LOCAL_HOME}
+  elif [[ $from =~ ^$REMOTE_HOME ]]; then # from remote to local
+    from=$HPC_NAME":"$from
+    to=${from/$REMOTE_HOME/$LOCAL_HOME}
+  elif [[ $from =~ ^$HPC_NAME ]]; then # from remote to local
+    from=${from/\~/$REMOTE_HOME}
+    to=${from/$HPC_NAME":"/}
+    to=${to/#\~/$LOCAL_HOME}
+    to=${to/$REMOTE_HOME/$LOCAL_HOME}
   elif [[ $from =~ ^~ ]]; then # from local to remote
-    from=${from/\~/$local_home}
-    to=${to/#\~/$remote_home}
-    to=$hpc_name":"$from
+    from=${from/\~/$LOCAL_HOME}
+    to=${to/#\~/$REMOTE_HOME}
+    to=$HPC_NAME":"$from
   else
     exit 1
   fi
@@ -37,10 +49,10 @@ function sd() {
   echo "From: "$from
   echo "To:   "$to
 
-  if [[ $from =~ ^$local_home ]]; then
-    ssh $hpc_name mkdir -p $(dirname ${to/$hpc_name":"/})
+  if [[ $from =~ ^$LOCAL_HOME ]]; then
+    ssh $HPC_NAME mkdir -p $(dirname ${to/$hpc_name":"/})
     scp $from $to
-  elif [[ $from =~ ^$hpc_name ]]; then
+  elif [[ $from =~ ^$HPC_NAME ]]; then
     mkdir -p $(dirname $to)
     scp $from $to
   fi
