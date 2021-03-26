@@ -1,6 +1,8 @@
 # USAGE
 
-## remote > local (tell direction by folder names
+## infer direction by folder names
+
+## remote > local
 # sd /mnt/isilon/a/b/c
 # sd /home/zhouw3/a/b/c
 # sd hpc:~/a/b/c
@@ -43,7 +45,7 @@ function sd() {
     to=${to/#\~/$REMOTE_HOME}
     to=$HPC_NAME":"$from
   else
-    exit 1
+    return 1;
   fi
 
   echo "From: "$from
