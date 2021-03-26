@@ -2,15 +2,22 @@
 # sd hpc:~/a/b/c # sync from remote to local
 # sd ~/a/b/c # sync from local to remote
 
+# sd /mnt/isilon/a/b/c # remote > local
+# sd ~/a/b/c local > remote
+
 function sd() {
   # please change this to your user name
   local_home="/Users/zhouw3"
   remote_home="/home/zhouw3"
+  remote_home2="/mnt/isilon"
   hpc_name="hpc" # set this up in your .ssh/config
   
   from=$1
   if [[ $from =~ ^$local_home ]]; then # from local to remote
     to=${from/$local_home/$hpc_name":"$remote_home}
+  elif [[ $from =~ ^$remote_home2 ]]; then # from remote to local
+    from=$hpc_name":"$from
+    to={$from/$remote_home2/$local_home}
   elif [[ $from =~ ^$remote_home ]]; then # from remote to local
     from=$hpc_name":"$from
     to=${from/$remote_home/$local_home}
