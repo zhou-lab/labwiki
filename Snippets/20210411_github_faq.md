@@ -32,3 +32,14 @@ git reset --hard master@{"20 minutes ago"}
 ```
 
 https://stackoverflow.com/questions/1223354/undo-git-pull-how-to-bring-repos-to-old-state
+
+
+# filter large files
+
+https://www.deployhq.com/git/faqs/removing-large-files-from-git-history
+
+```
+git filter-branch --force --index-filter \
+  'git rm --cached --ignore-unmatch path/to/ceo.jpg' \
+  --prune-empty --tag-name-filter cat -- --all
+```
