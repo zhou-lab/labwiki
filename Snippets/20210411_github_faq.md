@@ -43,3 +43,11 @@ git filter-branch --force --index-filter \
   'git rm --cached --ignore-unmatch path/to/ceo.jpg' \
   --prune-empty --tag-name-filter cat -- --all
 ```
+
+# squash commits
+
+https://stackoverflow.com/questions/14534397/squash-all-my-commits-into-one-for-github-pull-request
+
+```
+git rebase -i HEAD~3 
+```
