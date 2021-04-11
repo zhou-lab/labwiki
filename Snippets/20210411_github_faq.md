@@ -2,7 +2,8 @@
 
 pull PR #22 and to a new local branch called doc_tony
 ```
-git pull origin pull/22/head:doc_tony
+git fetch origin pull/22/head:doc_tony
+git checkout doc_tony
 ```
 
 see
@@ -24,3 +25,10 @@ git merge FETCH_HEAD
 https://stackoverflow.com/questions/44333437/git-what-is-refspec
 
 https://stackoverflow.com/questions/27567846/how-can-i-check-out-a-github-pull-request-with-git
+
+# Reset to 20 mins ago
+```
+git reset --hard master@{"20 minutes ago"}
+```
+
+https://stackoverflow.com/questions/1223354/undo-git-pull-how-to-bring-repos-to-old-state
