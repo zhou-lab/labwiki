@@ -18,3 +18,7 @@ is equal to
 git fetch origin master
 git merge FETCH_HEAD
 ```
+
+# How to interpret refspec?
+
+https://stackoverflow.com/questions/44333437/git-what-is-refspec
