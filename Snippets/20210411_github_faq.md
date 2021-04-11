@@ -5,5 +5,16 @@ pull PR #22 and to a new local branch called doc_tony
 git pull origin pull/22/head:doc_tony
 ```
 
+see
+https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/checking-out-pull-requests-locally
+
 # fetch and FETCH_HEAD
 FETCH_HEAD is a temporary head
+```
+git pull origin master
+```
+is equal to
+```
+git fetch origin master
+git merge FETCH_HEAD
+```
