@@ -22,4 +22,5 @@ git merge FETCH_HEAD
 # How to interpret refspec?
 
 https://stackoverflow.com/questions/44333437/git-what-is-refspec
+
 https://stackoverflow.com/questions/27567846/how-can-i-check-out-a-github-pull-request-with-git
