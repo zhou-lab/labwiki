@@ -109,12 +109,12 @@ Public domain name
 
 ### HPC Set up Environment
 
-Put
+Put the following line
 ```
 . /mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab
 ```
 
-to `~/.bashrc` (customize if you know how and feel like so).
+to the file `~/.bashrc` (customize if you know how and feel like so).
 
 Setup the symlinks, see [HPC wiki](https://github.com/zhou-lab/labwiki/blob/master/HPC.md)
 
