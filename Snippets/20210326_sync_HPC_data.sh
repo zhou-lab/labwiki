@@ -25,7 +25,6 @@
 ### ----------------
 # LOCAL_HOME="/Users/zhouw3"
 # REMOTE_HOME="/home/zhouw3"
-# REMOTE_SCR="/scr1/users/zhouw3/"
 # HPC_NAME="hpc5"
 # source <(curl -s https://raw.githubusercontent.com/zhou-lab/labwiki/master/Snippets/20210326_sync_HPC_data.sh)
 ### ----------------
@@ -36,7 +35,7 @@ function sf() {
   [[ -z "$LOCAL_HOME" ]] && LOCAL_HOME="/Users/zhouw3"
   [[ -z "$REMOTE_HOME" ]] && REMOTE_HOME="/home/zhouw3"
   [[ -z "$REMOTE_HOME2" ]] && REMOTE_HOME2="/mnt/isilon"
-  [[ -z "$REMOTE_HOME3" ]] && REMOTE_SCR="/scr1/users/zhouw3/"
+  [[ -z "$REMOTE_SCR" ]] && REMOTE_SCR="/scr1/users/zhouw3/"
   [[ -z "$HPC_NAME" ]] && HPC_NAME="hpc"
 
   from=$1
