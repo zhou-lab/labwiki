@@ -45,7 +45,7 @@ function sf() {
     to=${from/$REMOTE_HOME2/$LOCAL_HOME}
     from=$HPC_NAME":"$from
   elif [[ $from =~ ^$REMOTE_SCR ]]; then 
-    to=${from/$REMOTE_SCR/"$LOCAL_HOME/scr1_zhouw3"}
+    to=${from/"$REMOTE_SCR"/"$LOCAL_HOME/scr1_zhouw3"}
     from=$HPC_NAME":"$from
   elif [[ $from =~ ^$REMOTE_HOME ]]; then # from remote to local
     to=${from/$REMOTE_HOME/$LOCAL_HOME}
