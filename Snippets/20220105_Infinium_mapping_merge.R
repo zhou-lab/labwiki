@@ -25,8 +25,8 @@ mergeI_and_II_1 <- function(x) {
   
   df4 <- with(df3, tibble(
     CpG_chrm=df2$chrm, CpG_beg=df2$beg, CpG_end=df2$end, 
-    address_A = seqA[df2$probeID],
-    address_B = seqB[df2$probeID],
+    address_A = p2addrA[df2$probeID],
+    address_B = p2addrB[df2$probeID],
     target = df2$tgt,
     nextBase = ext,
     channel = col,
