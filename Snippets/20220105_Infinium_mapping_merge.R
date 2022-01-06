@@ -6,8 +6,8 @@ mergeI_and_II_1 <- function(x) {
   p2addrA = with(p2addr, setNames(addrA, Probe_ID))
   p2addrB = with(p2addr, setNames(addrB, Probe_ID))
   p2seq = read_tsv("tmp/probe2originalseq.txt", col_names = c("Probe_ID","seqA","seqB"))
-  p2seqA = with(p2seq, setNames(addrA, Probe_ID))
-  p2seqB = with(p2seq, setNames(addrB, Probe_ID))
+  p2seqA = with(p2seq, setNames(seqA, Probe_ID))
+  p2seqB = with(p2seq, setNames(seqB, Probe_ID))
   
   df1 <- read_tsv(sprintf('tmp/%s_AB_final', x), col_names=c(
     'chrmA','begA','endA','lastA','probeID','flagA','samChrmA','samPosA','mapqA','cigarA','samSeqA','nmA','asA','ydA',
