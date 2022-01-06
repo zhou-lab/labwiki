@@ -31,9 +31,11 @@ mergeI_and_II_1 <- function(x) {
     nextBase = ext,
     channel = col,
     Probe_ID = probeID,
-    lastBase_A = lastA, mapFlag_A = flagA, mapChrm_A = samChrmA, mapPos_A = samPosA, mapQ_A = mapqA, mapCigar_A = cigarA, AlleleA_ProbeSeq = p2seqA[probeID],
+    lastBase_A = lastA, mapFlag_A = flagA, mapChrm_A = samChrmA, mapPos_A = samPosA, mapQ_A = mapqA, 
+    mapCigar_A = cigarA, AlleleA_ProbeSeq = p2seqA[probeID],
     mapNM_A = nmA, mapAS_A = asA, mapYD_A = ydA, 
-    lastBase_B = lastB, mapFlag_B = flagB, mapChrm_B = samChrmB, mapPos_B = samPosB, mapQ_B = mapqB, mapCigar_B = cigarB, AlleleB_ProbeSeq = p2seqB[probeID],
+    lastBase_B = lastB, mapFlag_B = flagB, mapChrm_B = samChrmB, mapPos_B = samPosB, mapQ_B = mapqB, 
+    mapCigar_B = cigarB, AlleleB_ProbeSeq = p2seqB[probeID],
     mapNM_B = nmB, mapAS_B = asB, mapYD_B = ydB,
     design = NA,
     mask = NA, type = type))
