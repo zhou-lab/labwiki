@@ -24,10 +24,10 @@ mergeI_and_II_1 <- function(x) {
   df3 <- rbind(df1,df22)
   
   df4 <- with(df3, tibble(
-    CpG_chrm=df2$chrm, CpG_beg=df2$beg, CpG_end=df2$end, 
-    address_A = p2addrA[df2$probeID],
-    address_B = p2addrB[df2$probeID],
-    target = df2$tgt,
+    CpG_chrm = chrmA, CpG_beg = begA, CpG_end = endA, 
+    address_A = p2addrA[probeID],
+    address_B = p2addrB[probeID],
+    target = tgt,
     nextBase = ext,
     channel = col,
     Probe_ID = probeID,
