@@ -1,6 +1,7 @@
 
 mergeI_and_II <- function(dir) {
   setwd(dir)
+  dir.create("mapping", showWarnings=FALSE)
   df <- read_excel('~/samplesheets/2020/20201202_310_species_EnsemblVertebrates.xlsx')
   mfts <- mclapply(df$species, function(x) {
       df1 <- read_tsv(sprintf('%s/tmp/%s_AB_final', dir, x), col_names=c('chrmA','begA','endA','lastA','probeID','flagA','samChrmA','samPosA','mapqA','cigarA','samSeqA','nmA','asA','ydA','chrmB','begB','endB','lastB','probeID.B','flagB','samChrmB','samPosB','mapqB','cigarB','samSeqB','nmB','asB','ydB','ext','tgt','col'), guess_max=300000);
