@@ -1,5 +1,5 @@
 
-mergeI_and_II_tmp <- function(x) {
+mergeI_and_II_1 <- function(x) {
   dir.create("mapping", showWarnings=FALSE)
   df1 <- read_tsv(sprintf('tmp/%s_AB_final', x), col_names=c('chrmA','begA','endA','lastA','probeID','flagA','samChrmA','samPosA','mapqA','cigarA','samSeqA','nmA','asA','ydA','chrmB','begB','endB','lastB','probeID.B','flagB','samChrmB','samPosB','mapqB','cigarB','samSeqB','nmB','asB','ydB','ext','tgt','col'), guess_max=300000);
   df1$type='I'; df1$species=x;
@@ -13,7 +13,7 @@ mergeI_and_II <- function(dir) {
   setwd(dir)
   dir.create("mapping", showWarnings=FALSE)
   df <- read_excel('~/samplesheets/2020/20201202_310_species_EnsemblVertebrates.xlsx')
-  mfts <- mclapply(df$species, mergeI_and_II_tmp, mc.cores=20)
+  mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=20)
 
   ## count number of probes
   ns <- simplify2array(mclapply(df$species, function(x) nrow(readRDS(sprintf('mapping/%s.rds', x))), mc.cores=20))
