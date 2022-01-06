@@ -11,7 +11,9 @@ mergeI_and_II <- function(dir) {
       saveRDS(df3, file=sprintf('mapping/%s.rds', x))
   }, mc.cores=20)
 
+  ## count number of probes
   ns <- simplify2array(mclapply(df$species, function(x) nrow(readRDS(sprintf('mapping/%s.rds', x))), mc.cores=20))
   names(ns) <- df$species
+  write_tsv(data.frame(ns, species=names(ns)), file=sprintf('%s/num_probes.tsv', dir))
   ns
 }
