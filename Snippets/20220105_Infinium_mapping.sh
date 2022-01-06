@@ -14,9 +14,6 @@ function format_mapping_InfiniumI {
   ## merge A,B
   awk 'NR==FNR{a[$5]=$0;}NR!=FNR && ($5 in a){$6=and($6,0x10); print $0"\t"a[$5];}' tmp/${species}_B tmp/${species}_A >tmp/${species}_AB
   
-  ## add validation
-  awk '$1!="*" && ($10=="50M" || $24=="50M"){$2=$2-50;$3=$3+50;print $0;}' tmp/${species}_AB | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | awk -f wanding.awk -e 'NR!=FNR{print $5, "I", s1[$5]; print $29; if(!and($6,0x10)){printf("> ");} else {printf("<"); for(i=1;i<50;++i) printf(" "); } print $11; if(!and($6,0x10)) {printf("> "); os=s1[$5];}else {printf("<"); for(i=1;i<50;++i) printf(" "); os=dnarev(s1[$5])} print os; if(!and($6,0x10)){printf("> ");} else {printf("<"); for(i=1;i<50;++i) printf(" "); } print $25; if(!and($6,0x10)) {printf("> "); os=s2[$5];}else {printf("<"); for(i=1;i<50;++i) printf(" "); os=dnarev(s2[$5])} print os;print("\n");}NR==FNR{s1[$1]=$2;s2[$1]=$3;}' tmp/probe2originalseq.txt - >validation/${species}.txt
-  
   ## add extension and target sequence
   awk '$1!="*" && $1==$15 && $2==$16 && $3==$17 && $10=="50M" && $24=="50M"' tmp/${species}_AB | awk '$6==0{print $1,$3,$3+1,$0;}$6==16{print $1,$2-1,$2,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- | awk '$6==0{print $1,$3-2,$3,$0;}$6==16{print $1,$2,$2+2,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- >tmp/${species}_AB_clean
   ## add color channel
@@ -34,11 +31,12 @@ function format_mapping_InfiniumII {
   ## add extension and target sequence
   awk '$1!="*" && $10=="50M"' tmp/${species}_II | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa >tmp/${species}_II_clean
 
-  ## add validation
-  awk '$1!="*" && $10=="50M"{$2=$2-50;$3=$3+50;print $0;}' tmp/${species}_II | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | awk -f wanding.awk -e 'NR!=FNR{print $5, "II", s1[$5]; print $15; if(!and($6,0x10)){printf(">");} else {printf("<"); for(i=1;i<51;++i) printf(" "); } print $11; if(!and($6,0x10)) {printf(">"); os=s1[$5];}else {printf("<"); for(i=1;i<51;++i) printf(" "); os=dnarev(s1[$5])} print os; print("\n");}NR==FNR{s1[$1]=$2}' tmp/probe2originalseq.txt - >>validation/${species}.txt
-  
   ## add tgt
   awk 'NR==FNR{tgt[$5]=$15;}NR!=FNR && ($5 in tgt){print $0,tgt[$5];}' tmp/${species}_II_clean tmp/${species}_II | sortbed >tmp/${species}_II_final
 }
 
+function validate_Infinium {
+  awk '$1!="*" && ($10=="50M" || $24=="50M"){$2=$2-50;$3=$3+50;print $0;}' tmp/${species}_AB | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | awk -f wanding.awk -e 'NR!=FNR{print $5, "I", s1[$5]; print $29; if(!and($6,0x10)){printf("> ");} else {printf("<"); for(i=1;i<50;++i) printf(" "); } print $11; if(!and($6,0x10)) {printf("> "); os=s1[$5];}else {printf("<"); for(i=1;i<50;++i) printf(" "); os=dnarev(s1[$5])} print os; if(!and($6,0x10)){printf("> ");} else {printf("<"); for(i=1;i<50;++i) printf(" "); } print $25; if(!and($6,0x10)) {printf("> "); os=s2[$5];}else {printf("<"); for(i=1;i<50;++i) printf(" "); os=dnarev(s2[$5])} print os;print("\n");}NR==FNR{s1[$1]=$2;s2[$1]=$3;}' tmp/probe2originalseq.txt - >validation/${species}.txt
+  awk '$1!="*" && $10=="50M"{$2=$2-50;$3=$3+50;print $0;}' tmp/${species}_II | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | awk -f wanding.awk -e 'NR!=FNR{print $5, "II", s1[$5]; print $15; if(!and($6,0x10)){printf(">");} else {printf("<"); for(i=1;i<51;++i) printf(" "); } print $11; if(!and($6,0x10)) {printf(">"); os=s1[$5];}else {printf("<"); for(i=1;i<51;++i) printf(" "); os=dnarev(s1[$5])} print os; print("\n");}NR==FNR{s1[$1]=$2}' tmp/probe2originalseq.txt - >>validation/${species}.txt
+}
 
