@@ -38,7 +38,7 @@ mergeI_and_II_1 <- function(x) {
     mapCigar_B = cigarB, AlleleB_ProbeSeq = p2seqB[probeID],
     mapNM_B = as.integer(str_replace(nmB, "NM:i:","")), mapAS_B = as.integer(str_replace(asB, "AS:i:","")), mapYD_B = str_replace(ydB, "YD:A:",""), 
     design = NA,
-    mask = NA, type = type))
+    mask = FALSE, type = type))
   
   df4 = df4[order(df4$Probe_ID),]
   saveRDS(df4, file=sprintf('mapping/%s.rds', x))
