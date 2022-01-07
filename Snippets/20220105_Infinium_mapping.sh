@@ -33,7 +33,7 @@ function format_mapping_InfiniumII {
   awk '$1!="*" && $10=="50M"' tmp/${species}_II | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa >tmp/${species}_II_clean
 
   ## add tgt
-  awk 'NR==FNR{tgt[$5]=$15;}NR!=FNR {if($5 in tgt) {tgtn=tgt[$5];} else {tgtn="NA";} {print $0,tgtn;}' tmp/${species}_II_clean tmp/${species}_II | sortbed >tmp/${species}_II_final
+  awk 'NR==FNR{tgt[$5]=$15;}NR!=FNR {if($5 in tgt) {tgtn=tgt[$5];} else {tgtn="NA";} print $0,tgtn;}' tmp/${species}_II_clean tmp/${species}_II | sortbed >tmp/${species}_II_final
 }
 
 function validate_Infinium {
