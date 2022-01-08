@@ -15,7 +15,7 @@ function format_mapping_InfiniumI {
   awk 'NR==FNR{a[$5]=$0;}NR!=FNR && ($5 in a){$6=and($6,0x14); print $0"\t"a[$5];}' tmp/${species}_B tmp/${species}_A >tmp/${species}_AB
   
   ## add extension and target sequence
-  awk '$1!="*" && $1==$15 && $2==$16 && $3==$17 && $10=="50M" && $24=="50M"' tmp/${species}_AB | awk '$6==0{if($5~/_[TBN]O/ && !($5~/^rs/)){pos=$3-1;}else{pos=$3;} print $1,pos,pos+1,$0;}$6==16{if($5~/_[TBN]O/ && !($5~/^rs/)){pos=$2+1;}else{pos=$2;} print $1,pos-1,pos,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- | awk '$6==0{print $1,$2,$3,$0;}$6==16{print $1,$2,$3,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- >tmp/${species}_AB_clean
+  awk '$1!="*" && $10=="50M"' tmp/${species}_AB | awk '$6==0{if($5~/_[TBN]O/ && !($5~/^rs/)){pos=$3-1;}else{pos=$3;} print $1,pos,pos+1,$0;}$6==16{if($5~/_[TBN]O/ && !($5~/^rs/)){pos=$2+1;}else{pos=$2;} print $1,pos-1,pos,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- | awk '$6==0{print $1,$2,$3,$0;}$6==16{print $1,$2,$3,$0;}' | wzseqtk.py getfasta -i - -f ${fa}/${species}.fa | cut -f4- >tmp/${species}_AB_clean
   ## add color channel
   awk 'NR==FNR{ext[$5]=$29;tgt[$5]=$30;}NR!=FNR{if($5 in ext) {extn=ext[$5]; tgtn=tgt[$5];} else {extn="NA"; tgtn="NA";} print $0,extn,tgtn;}' tmp/${species}_AB_clean tmp/${species}_AB | awk -f wanding.awk -e '{if($6==16 && $29!="NA") {$29=dnarev($29);} if($29=="C") col="G"; else if ($29=="NA") col="NA"; else col="R"; print $0"\t"col;}' | sortbed >tmp/${species}_AB_final
 }
