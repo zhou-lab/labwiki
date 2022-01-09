@@ -56,7 +56,7 @@ mergeI_and_II <- function(dir) {
   ## mfts <- lapply(df$species, mergeI_and_II_1)
 
   ## count number of probes
-  ns <- simplify2array(mclapply(df$species, function(x) nrow(read_tsv(sprintf('mapping/%s.tsv.gz', x))), mc.cores=10))
+  ns <- simplify2array(mclapply(df$species, function(x) nrow(read_tsv(sprintf('mapping/%s.tsv.gz', x), show_col_types=FALSE, progress=FALSE)), mc.cores=10))
   names(ns) <- df$species
   write_tsv(data.frame(ns, species=names(ns)), file=sprintf('%s/num_probes.tsv', dir))
   ns
