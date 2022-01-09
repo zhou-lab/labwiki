@@ -3,10 +3,10 @@ mergeI_and_II_1 <- function(x) {
   cat(sprintf("Processing %s.\n", x))
   dir.create("mapping", showWarnings=FALSE)
   
-  p2addr = read_tsv("tmp/probe2address.txt", col_names = c("Probe_ID","addrA","addrB"), show_col_types=FALSE)
+  p2addr = read_tsv("tmp/probe2address.txt", col_names = c("Probe_ID","addrA","addrB"), show_col_types=FALSE, progress=FALSE)
   p2addrA = with(p2addr, setNames(addrA, Probe_ID))
   p2addrB = with(p2addr, setNames(addrB, Probe_ID))
-  p2seq = read_tsv("tmp/probe2originalseq.txt", col_names = c("Probe_ID","seqA","seqB"), show_col_types=FALSE)
+  p2seq = read_tsv("tmp/probe2originalseq.txt", col_names = c("Probe_ID","seqA","seqB"), show_col_types=FALSE, progress=FALSE)
   p2seqA = with(p2seq, setNames(seqA, Probe_ID))
   p2seqB = with(p2seq, setNames(seqB, Probe_ID))
   
