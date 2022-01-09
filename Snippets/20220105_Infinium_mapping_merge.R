@@ -49,12 +49,12 @@ mergeI_and_II <- function(dir) {
     
   dir.create("mapping", showWarnings=FALSE)
   df <- read_excel('~/samplesheets/2020/20201202_310_species_EnsemblVertebrates.xlsx')
-  ## mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=10)
-  mfts <- lapply(df$species, mergeI_and_II_1)
+  mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=20)
+  ## mfts <- lapply(df$species, mergeI_and_II_1)
 
   ## count number of probes
-  ns <- simplify2array(mclapply(df$species, function(x) nrow(read_tsv(sprintf('mapping/%s.tsv.gz', x))), mc.cores=10))
-  names(ns) <- df$species
-  write_tsv(data.frame(ns, species=names(ns)), file=sprintf('%s/num_probes.tsv', dir))
-  ns
+  #ns <- simplify2array(mclapply(df$species, function(x) nrow(read_tsv(sprintf('mapping/%s.tsv.gz', x))), mc.cores=10))
+  #names(ns) <- df$species
+  #write_tsv(data.frame(ns, species=names(ns)), file=sprintf('%s/num_probes.tsv', dir))
+  #ns
 }
