@@ -41,7 +41,7 @@ mergeI_and_II_1 <- function(x) {
     type = type))
   
   df4 = df4[order(df4$Probe_ID),]
-  write_tsv(df4, file=sprintf("mapping/%s.tsv.gz", x))
+  write_tsv(df4, file=sprintf("mapping/%s.tsv.gz", x), progress=FALSE)
 }
 
 mergeI_and_II <- function(dir) {
