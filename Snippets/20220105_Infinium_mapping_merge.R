@@ -1,5 +1,6 @@
 
 mergeI_and_II_1 <- function(x) {
+  cat(sprintf("Processing %s.\n", x))
   dir.create("mapping", showWarnings=FALSE)
   
   p2addr = read_tsv("tmp/probe2address.txt", col_names = c("Probe_ID","addrA","addrB"))
@@ -48,7 +49,8 @@ mergeI_and_II <- function(dir) {
     
   dir.create("mapping", showWarnings=FALSE)
   df <- read_excel('~/samplesheets/2020/20201202_310_species_EnsemblVertebrates.xlsx')
-  mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=10)
+  ## mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=10)
+  mfts <- lapply(df$species, mergeI_and_II_1)
 
   ## count number of probes
   ns <- simplify2array(mclapply(df$species, function(x) nrow(read_tsv(sprintf('mapping/%s.tsv.gz', x))), mc.cores=10))
