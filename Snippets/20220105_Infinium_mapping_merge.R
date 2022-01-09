@@ -12,10 +12,10 @@ mergeI_and_II_1 <- function(x) {
   df1 <- read_tsv(sprintf('tmp/%s_AB_final', x), col_names=c(
     'chrmA','begA','endA','lastA','probeID','flagA','samChrmA','samPosA','mapqA','cigarA','samSeqA','nmA','asA','ydA',
     'chrmB','begB','endB','lastB','probeID.B','flagB','samChrmB','samPosB','mapqB','cigarB','samSeqB','nmB','asB','ydB',
-    'ext','tgt','col'), guess_max=300000);
+    'ext','tgt','col'), guess_max=300000, show_col_types=FALSE);
   df1$type='I'; df1$species=x;
   df2 <- read_tsv(sprintf('tmp/%s_II_final', x), col_names=c(
-    'chrm','beg','end','last','probeID','flag','samChrm','samPos','mapq','cigar','samSeq','nm','as','yd','tgt'), guess_max=300000);
+    'chrm','beg','end','last','probeID','flag','samChrm','samPos','mapq','cigar','samSeq','nm','as','yd','tgt'), guess_max=300000, show_col_types=FALSE);
   df22 <- tibble(chrmA=df2$chrm, begA=df2$beg, endA=df2$end, 
                  lastA=df2$last, probeID=df2$probeID, flagA=df2$flag, samChrmA=df2$samChrm, samPosA=df2$samPos, 
                  mapqA=df2$mapq, cigarA=df2$cigar, samSeqA=df2$samSeq, nmA=df2$nm, asA=df2$as, ydA=df2$yd, 
