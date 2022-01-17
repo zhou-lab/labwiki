@@ -15,7 +15,7 @@ mergeI_and_II_1 <- function(x) {
     'chrmB','begB','endB','lastB','probeID.B','flagB','samChrmB','samPosB','mapqB','cigarB','samSeqB','nmB','asB','ydB',
     'ext','tgt','col'), guess_max=300000, show_col_types=FALSE, progress=FALSE, 
     col_types = cols(tgt=col_character(), lastA=col_character(), lastB=col_character(), 
-                     asA=col_character(), ydA=col_character(), asB=col_character(), ydB=col_character()
+                     asA=col_character(), ydA=col_character(), asB=col_character(), ydB=col_character(),
                      ext=col_character(), col=col_character()));
   df1$type='I'; df1$species=x;
   df2 <- read_tsv(sprintf('tmp/%s_II_final', x), col_names=c(
