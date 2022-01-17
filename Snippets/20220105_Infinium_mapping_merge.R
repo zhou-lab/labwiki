@@ -13,7 +13,7 @@ mergeI_and_II_1 <- function(x) {
   df1 <- read_tsv(sprintf('tmp/%s_AB_final', x), col_names=c(
     'chrmA','begA','endA','lastA','probeID','flagA','samChrmA','samPosA','mapqA','cigarA','samSeqA','nmA','asA','ydA',
     'chrmB','begB','endB','lastB','probeID.B','flagB','samChrmB','samPosB','mapqB','cigarB','samSeqB','nmB','asB','ydB',
-    'ext','tgt','col'), guess_max=300000, show_col_types=FALSE, progress=FALSE);
+    'ext','tgt','col'), guess_max=300000, show_col_types=FALSE, progress=FALSE, col_types = cols(tgt=col_character(), ext=col_character(), col=col_character()));
   df1$type='I'; df1$species=x;
   df2 <- read_tsv(sprintf('tmp/%s_II_final', x), col_names=c(
     'chrm','beg','end','last','probeID','flag','samChrm','samPos','mapq','cigar','samSeq','nm','as','yd','tgt'), 
