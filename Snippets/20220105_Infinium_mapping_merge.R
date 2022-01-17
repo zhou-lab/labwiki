@@ -46,6 +46,8 @@ mergeI_and_II_1 <- function(x) {
     mapNM_B = as.integer(str_replace(nmB, "NM:i:","")), mapAS_B = as.integer(str_replace(asB, "AS:i:","")), mapYD_B = str_replace(ydB, "YD:A:",""), 
     type = type))
   
+  df4$CpG_chrm[df4$CpG_chrm == "*"] <- NA
+  
   df4 = df4[order(df4$Probe_ID),]
   write_tsv(df4, file=sprintf("mapping/%s.tsv.gz", x), progress=FALSE)
   invisible(gc())
