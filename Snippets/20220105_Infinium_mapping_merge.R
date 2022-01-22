@@ -48,7 +48,8 @@ mergeI_and_II_1 <- function(x, goodprobes = NULL) {
   
   df4$CpG_chrm[df4$CpG_chrm == "*"] <- NA
   
-  df44 <- read_tsv("tmp/controls.tsv", show_col_types=FALSE, progress=FALSE, col_names=c("Probe_ID", "address_A", "address_B", "channel", "type"))
+  df44 <- read_tsv("tmp/controls.tsv", show_col_types=FALSE, progress=FALSE, col_names=c("Probe_ID", "address_A", "address_B", "channel", "type"),
+     col_types = cols(Probe_ID=col_character(), address_A=col_integer(), address_B=col_integer(), channel=col_character(), type=col_character()))
   df4 = bind_rows(df4, df44)
   if(!is.null(goodprobes)) {
     df4 = df4[df4$Probe_ID %in% goodprobes,]
