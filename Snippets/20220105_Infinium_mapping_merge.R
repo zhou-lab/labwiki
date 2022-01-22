@@ -1,5 +1,5 @@
 
-mergeI_and_II_1 <- function(x) {
+mergeI_and_II_1 <- function(x, goodprobes = NULL) {
   cat(sprintf("Processing %s.\n", x))
   dir.create("mapping", showWarnings=FALSE)
   
@@ -49,6 +49,9 @@ mergeI_and_II_1 <- function(x) {
   df4$CpG_chrm[df4$CpG_chrm == "*"] <- NA
   
   df4 = bind_rows(df4,read_tsv("tmp/controls.tsv", show_col_types=FALSE, progress=FALSE, col_names=c("Probe_ID", "address_A", "address_B")))
+  if(!is.null(goodprobes)) {
+    df4 = df4[df4$Probe_ID %in% goodprobes,]
+  }
   df4 = df4[order(df4$Probe_ID),]
   write_tsv(df4, file=sprintf("mapping/%s.tsv.gz", x), progress=FALSE)
   
@@ -56,12 +59,12 @@ mergeI_and_II_1 <- function(x) {
   NULL
 }
 
-mergeI_and_II <- function(dir) {
+mergeI_and_II <- function(dir, goodprobes=NULL) {
   setwd(dir)
     
   dir.create("mapping", showWarnings=FALSE)
   df <- read_excel('~/samplesheets/2020/20201202_310_species_EnsemblVertebrates.xlsx')
-  mfts <- mclapply(df$species, mergeI_and_II_1, mc.cores=20)
+  mfts <- mclapply(df$species, mergeI_and_II_1, goodprobes, mc.cores=20)
   ## mfts <- lapply(df$species, mergeI_and_II_1)
 
   ## count number of probes
