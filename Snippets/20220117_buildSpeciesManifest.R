@@ -15,6 +15,7 @@ build_speciesManifest <- function(in_dir, reference) {
     o1 <- list(col = factor(df$channel, level=c("G","R")), mask = rep(FALSE, nrow(df)), AS = with(df, pmax(mapAS_A, mapAS_B, na.rm=TRUE)))
     o1$mask[grepl("^cg", df$Probe_ID) & (df$mapAS_A < 40 | df$target!="CG")] = TRUE
     o1$mask[(!grepl("^cg", df$Probe_ID)) & (df$mapAS_A < 40)] = TRUE
+    o1$mask[is.na(df$mapAS_A)] = TRUE
     o1$scientificName <- nm
     o1$taxonID <- dfsp$taxonID[ii]
     o1$commonName <- dfsp$commonName[ii]
