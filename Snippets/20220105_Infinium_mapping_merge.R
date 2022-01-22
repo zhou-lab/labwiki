@@ -48,7 +48,7 @@ mergeI_and_II_1 <- function(x) {
   
   df4$CpG_chrm[df4$CpG_chrm == "*"] <- NA
   
-  df4 = rbind_rows(read_tsv("tmp/controls.tsv", show_col_types=FALSE, progress=FALSE, col_names=c("Probe_ID", "address_A", "address_B")))
+  df4 = bind_rows(read_tsv("tmp/controls.tsv", show_col_types=FALSE, progress=FALSE, col_names=c("Probe_ID", "address_A", "address_B")))
   df4 = df4[order(df4$Probe_ID),]
   write_tsv(df4, file=sprintf("mapping/%s.tsv.gz", x), progress=FALSE)
   
