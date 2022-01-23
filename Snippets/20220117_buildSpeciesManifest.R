@@ -8,7 +8,7 @@ create_mask <- function(df) {
          missing_target = ifelse((!unmapped) & (target != "CG") & grepl("^cg", Probe_ID), 1, 0),
          control = ifelse(grepl("^ctl", Probe_ID), 1, 0),
          design_issue = ifelse(grepl("^uk", Probe_ID), 1, 0)))
-    masks$ref_issue = with(masks, unmapped | missing_target)
+    masks$ref_issue = with(masks, unmapped * missing_target)
     masks
 }
 
