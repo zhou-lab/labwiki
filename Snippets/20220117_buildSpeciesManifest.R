@@ -7,7 +7,7 @@ create_mask <- function(df) {
     masks$control = ifelse(grepl("^ctl", df$Probe_ID), 1, 0)
     masks$design_issue = ifelse(grepl("^uk", df$Probe_ID), 1, 0)
     masks$unmapped <- ifelse(unmapped == 1 & masks$control != 1 & masks$design_issue != 1, 1, 0)
-    masks$low_mapq <- ifelse((!is.na(mapQ_A) & (mapQ_A < 30 | (!is.na(mapQ_B) & mapQ_B < 30)), 1, 0)
+    masks$low_mapq <- ifelse((!is.na(mapQ_A)) & (mapQ_A < 30 | (!is.na(mapQ_B) & mapQ_B < 30)), 1, 0)
     masks$ref_issue <- with(masks, as.integer(unmapped * missing_target))
     masks
 }
