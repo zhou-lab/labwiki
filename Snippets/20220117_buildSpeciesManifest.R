@@ -2,13 +2,12 @@ create_mask <- function(df) {
     unmapped <- ifelse(is.na(df$mapAS_A) | df$mapAS_A < 35 | (!is.na(df$mapAS_B) & df$mapAS_B < 35), 1, 0)
     masks <- with(df, data.frame(
          Probe_ID = Probe_ID,
-         unmapped = unmapped,
          nonunique = ifelse((!unmapped) & (mapQ_A == 0 | (!is.na(mapQ_B) & mapQ_B == 0)), 1, 0),
-         low_mapq = ifelse(mapQ_A < 30 | (!is.na(mapQ_B) & mapQ_B < 30), 1, 0),
          missing_target = ifelse((!unmapped) & (target != "CG") & grepl("^cg", Probe_ID), 1, 0)))
     masks$control = ifelse(grepl("^ctl", df$Probe_ID), 1, 0)
     masks$design_issue = ifelse(grepl("^uk", df$Probe_ID), 1, 0)
-    masks$unmapped <- ifelse(unmapped == 1 & masks$control != 1 & masks$design_issue != 1, 1, 0) 
+    masks$unmapped <- ifelse(unmapped == 1 & masks$control != 1 & masks$design_issue != 1, 1, 0)
+    masks$low_mapq <- ifelse((!is.na(mapQ_A) & (mapQ_A < 30 | (!is.na(mapQ_B) & mapQ_B < 30)), 1, 0),
     masks$ref_issue <- with(masks, as.integer(unmapped * missing_target))
     masks
 }
