@@ -3,7 +3,7 @@ create_mask <- function(df) {
     masks <- with(df, data.frame(
          Probe_ID = Probe_ID,
          nonunique = ifelse((!unmapped) & (mapQ_A == 0 | (!is.na(mapQ_B) & mapQ_B == 0)), 1, 0),
-         missing_target = ifelse((!unmapped) & (target != "CG") & grepl("^cg", Probe_ID), 1, 0)))
+         missing_target = ifelse((!unmapped) & (is.na(target) | (target != "CG")) & grepl("^cg", Probe_ID), 1, 0)))
     masks$control = ifelse(grepl("^ctl", df$Probe_ID), 1, 0)
     masks$design_issue = ifelse(grepl("^uk", df$Probe_ID), 1, 0)
     masks$unmapped <- ifelse(unmapped == 1 & masks$control != 1 & masks$design_issue != 1, 1, 0)
