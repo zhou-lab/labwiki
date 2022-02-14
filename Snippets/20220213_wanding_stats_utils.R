@@ -45,3 +45,31 @@ UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
   }
   return(res)
 }
+
+
+Entropy <- function(x, y = NULL, base = 2, ...) {
+
+  # x is either a table or a vector if y is defined
+
+  if(!is.null(y)) { x <- table(x, y, ...) }
+  x <- as.matrix(x)
+
+  ptab <- x / sum(x)
+  H <- - sum( ifelse(ptab > 0, ptab * log(ptab, base=base), 0) )
+  return(H)
+
+}
+
+
+MutInf <- function(x, y = NULL, base = 2, ...){
+  # ### Ref.:  http://en.wikipedia.org/wiki/Cluster_labeling
+
+  if(!is.null(y)) { x <- table(x, y, ...) }
+  x <- as.matrix(x)
+
+  return(
+    Entropy(rowSums(x), base=base) +
+      Entropy(colSums(x), base=base) - Entropy(x, base=base)
+  )
+
+}
