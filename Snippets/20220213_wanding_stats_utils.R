@@ -1,7 +1,7 @@
 
 ## source: DescTools https://github.com/AndriSignorell/DescTools/blob/f46b633486104c963137f574cbb826f0bf5e182d/R/StatsAndCIs.r
 UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
-                       conf.level = NA, p.zero.correction = 1/sum(x)^2, ... ) {
+                       p.zero.correction = 1/sum(x)^2, ... ) {
   # Theil's UC (1970)
   # slightly nudge zero values so that their logarithm can be calculated (cf. Theil 1970: x->0 => xlogx->0)
   if(!is.null(y)) x <- table(x, y, ...)
@@ -21,28 +21,6 @@ UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
           , "row" = { res <- (hx + hy - hxy)/hx }
           , "column" = { res <- (hx + hy - hxy)/hy }
   )
-
-  if(!is.na(conf.level)){
-    var.uc.RC <- var.uc.CR <- 0
-    for(i in 1:nrow(x))
-      for(j in 1:ncol(x))
-      { var.uc.RC <- var.uc.RC + x[i,j]*(hx*log(x[i,j]/csum[j])+((hy-hxy)*log(rsum[i]/n)))^2/(n^2*hx^4);
-      var.uc.CR <- var.uc.CR + x[i,j]*(hy*log(x[i,j]/rsum[i])+((hx-hxy)*log(csum[j]/n)))^2/(n^2*hy^4);
-      }
-    switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
-            , "symmetric" = {
-              sigma2 <- 4*sum(x * (hxy * log(rsum %o% csum/n^2) - (hx+hy)*log(x/n))^2 ) /
-                (n^2*(hx+hy)^4)
-            }
-            , "row" = { sigma2 <- var.uc.RC }
-            , "column" = { sigma2 <- var.uc.CR }
-    )
-
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res
-
-    res <- c(uc = res,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
-  }
   return(res)
 }
 
