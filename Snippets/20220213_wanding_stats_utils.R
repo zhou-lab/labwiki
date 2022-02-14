@@ -1,3 +1,5 @@
+
+## source: DescTools https://github.com/AndriSignorell/DescTools/blob/f46b633486104c963137f574cbb826f0bf5e182d/R/StatsAndCIs.r
 UncertCoef <- function(x, y = NULL, direction = c("symmetric", "row", "column"),
                        conf.level = NA, p.zero.correction = 1/sum(x)^2, ... ) {
   # Theil's UC (1970)
