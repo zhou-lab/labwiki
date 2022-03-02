@@ -1,5 +1,5 @@
 ## a convenience function, only works on Mac
-sesameDataClearHub <- function() {
+sesameDataExtra_ClearHub <- function() {
     unlink("~/Library/Caches/org.R-project.R/R/ExperimentHub/", recursive=TRUE)
 }
 
@@ -20,9 +20,9 @@ alt_base2 <- "https://zwdzwd.s3.amazonaws.com"
 #' @importFrom readr col_integer
 #' @importFrom readr col_character
 #' @examples
-#' mft <- sesameData_getManifestDF("Mammal40")
+#' mft <- sesameDataExtra_getManifestDF("Mammal40")
 #' @export
-sesameData_getManifestDF <- function(platform, genome=NULL,
+sesameDataExtra_getManifestDF <- function(platform, genome=NULL,
     version = manifest_base_default_version) {
     
     platform <- sesameData_check_platform(platform)
@@ -44,20 +44,8 @@ sesameData_getManifestDF <- function(platform, genome=NULL,
     data
 }
 
-#' download Infinium manifest from repositories and return GRanges
-#'
-#' @param platform Mammal40, MM285, EPIC, and HM450
-#' @param genome hg38, mm10 etc.
-#' @param decoy whether to include probes mapped to decoy sequence
-#' @param version release version, default is the latest
-#' @param check_EH return the ExperimentHub version if present
-#' @param columns additional columns to add from the manifest to mcols
-#' @return GRanges
-#' @importFrom GenomeInfoDb Seqinfo
-#' @examples
-#' gr <- sesameData_getManifestGRanges("Mammal40")
-#' @export
-sesameData_getManifestGRanges <- function(
+## used to be sesameData_getManifestGRanges
+sesameDataExtra_buildManifestGRanges <- function(
     platform, genome = NULL, version = manifest_base_default_version,
     check_EH = TRUE, decoy = FALSE, columns = NULL) {
 
@@ -140,7 +128,7 @@ download_file <- function(title, version, dest_dir) {
 #' }
 #' 
 #' @export
-sesameData_getAnno <- function(
+sesameDataExtra_getAnno <- function(
     title, version = anno_base_default_version, dest_dir = NULL) {
 
     if (!is.null(dest_dir)) {
