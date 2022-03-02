@@ -7,6 +7,7 @@ manifest_base <- "https://github.com/zhou-lab/InfiniumManifestsV"
 manifest_base_default_version <- 1
 anno_base <- "https://github.com/zhou-lab/InfiniumAnnotationV"
 anno_base_default_version <- 1
+alt_base2 <- "https://zwdzwd.s3.amazonaws.com"
 
 #' download Infinium manifest from Github repositories
 #'
