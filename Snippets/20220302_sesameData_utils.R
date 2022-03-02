@@ -171,4 +171,9 @@ sesameData_getAnno <- function(
     anno
 }
 
+## annoS <- sesameData_getAnno("EPIC/EPIC.hg19.typeI_overlap_b151.rds")
+## One can also download annotation file to disk
+## sesameData_getAnno("test/3999492009_R01C01_Grn.idat", dest_dir = tempdir())
+
+
 
