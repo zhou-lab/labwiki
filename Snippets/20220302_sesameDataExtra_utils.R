@@ -1,5 +1,6 @@
 ## a convenience function, only works on Mac
 sesameDataExtra_ClearHub <- function() {
+    ## tools::R_user_dir("ExperimentHub", which="cache")
     unlink("~/Library/Caches/org.R-project.R/R/ExperimentHub/", recursive=TRUE)
 }
 
