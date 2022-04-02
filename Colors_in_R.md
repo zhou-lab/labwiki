@@ -5,6 +5,8 @@ palette_gen_func = grDevices::colorRampPalette(color_vector)
 color_vector = palette_gen_func(n_colors)
 ```
 
+It is common in R to start with a palette-generating function (like `brewer.pal`), generate a color vector and regenerate a palette-generating function.
+
 Also not very commonly, there is a `colorRamp` function. More can be found [here](https://bookdown.org/rdpeng/exdata/plotting-and-color-in-r.html#colorramp)
 
 ## [pals](https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html) (Recommended!)
