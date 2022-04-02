@@ -14,12 +14,13 @@ heat.colors(4, alpha=1)
 
 ## [RColorBrewer](http://applied-r.com/rcolorbrewer-palettes/)
 
-A very popular package, that provides `brewer.pal`.
+A very popular package, that provides `brewer.pal()`.
 
 ```R
 library(RColorBrewer)
 par(mar=c(3,4,2,2))
 display.brewer.all()
+display.brewer.all(colorblindFriendly=TRUE)
 brewer.pal(8,"Set3")
 ## [1] "#8DD3C7" "#FFFFB3" "#BEBADA" "#FB8072" "#80B1D3" "#FDB462" "#B3DE69"
 ## [8] "#FCCDE5"
