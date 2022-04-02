@@ -14,7 +14,7 @@ heat.colors(4, alpha=1)
 
 ## [RColorBrewer](http://applied-r.com/rcolorbrewer-palettes/)
 
-A very popular package, that provides `brewer.pal()`.
+A very popular package, that provides the `brewer.pal()` function. However, this package only provides one (though powerful) palette-generating function. The actual palette name is an argument to `brewer.pal`, such as `Set1`, `Set2`, `Paired`, `Dark`, `Accent`, `Spectral`, `RdBu`, `YlGn`, etc.
 
 ```R
 library(RColorBrewer)
