@@ -1,3 +1,12 @@
+Most functions either take a palette-generating function or a vector of colors. 
+
+```R
+palette_gen_func = grDevices::colorRampPalette(color_vector)
+color_vector = palette_gen_func(n_colors)
+```
+
+Also not very commonly, there is a `colorRamp` function. More can be found [here](https://bookdown.org/rdpeng/exdata/plotting-and-color-in-r.html#colorramp)
+
 ## [pals](https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html) (Recommended!)
 
 This is a new collection with some of the most popular palette-generating functions, e.g., `parula`, `turbo`.
@@ -30,12 +39,16 @@ brewer.pal(8,"Set3")
 
 This a very popular package that provides `diverge_hcl`, `diverge_hsl`, `terrain_hcl`, `sequential_hcl`, `rainbow_hcl`, etc.
 
+[Here](https://colorspace.r-forge.r-project.org/articles/hcl_palettes.html) is a good tutorial on how to use it.
+
 ```R
 library(colorspace)
 rainbow_hcl(4)
 ## "#E495A5" "#ABB065" "#39BEB1" "#ACA4E2“
 diverge_hcl(7, h = c(246, 40), c = 96, l = c(65, 90))
 pal <- choose_palette()
+hcl_palettes("sequential (multi-hue)", n = 7, plot = TRUE)
+sequential_hcl
 ```
 
 [package home](https://cran.r-project.org/web/packages/RColorBrewer/index.html)
