@@ -42,7 +42,7 @@ pal <- choose_palette()
 
 ## [colorRamps](https://cran.r-project.org/web/packages/colorRamps/index.html)
 
-An old collection which hasn't been much maintained. But still sometimes used.
+An old collection which hasn't been much maintained. But still sometimes used. provides `matlab_like`, `matlab_like2`, `ygobb` etc.
 
 ## [A Cheatsheet](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf)
 
