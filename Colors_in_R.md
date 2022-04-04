@@ -61,6 +61,12 @@ An old collection which hasn't been much maintained. But still sometimes used. p
 
 ## [A Cheatsheet](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf)
 
+## [ggsci](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)
+
+Some additional color palette used in popular journals.
+
+Also see [ggpubr](https://rpkgs.datanovia.com/ggpubr/reference/get_palette.html)
+
 ## Specify color manually (not recommended)
 
 ```R
