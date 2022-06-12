@@ -13,6 +13,13 @@ Also not very commonly, there is a `colorRamp` function. More can be found [here
 
 This is a new collection with some of the most popular palette-generating functions, e.g., `parula`, `turbo`.
 
+```R
+> brewer.paired(3) # this is the same as brewer.pal(3, "Paired") but allow more than 12 colors
+> brewer.set1(3)
+> brewer.set2(3)
+> brewer.set3(3)
+```
+
 Also see [the bivariate color from pals](https://cran.r-project.org/web/packages/pals/vignettes/bivariate_choropleths.html)
 
 ## [grDevices](https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/palettes.html)
