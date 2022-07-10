@@ -42,7 +42,7 @@ I recommend you view the video and page here: https://wiki.chop.edu/display/RISU
 Full slurm scheduling docs for our cluster: https://wiki.chop.edu/pages/viewpage.action?pageId=261751857
 The replacement for jupyterhub is documented here: https://wiki.chop.edu/pages/viewpage.action?pageId=261751861
 
-You can use firefox in VDI through
+You can use firefox in VDI through (thanks to Kai Wang)
 
 ```sh
 cd
@@ -50,6 +50,10 @@ wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/95.0.2/linu
 tar xaf firefox-95.0.2.tar.bz2
 ./firefox/firefox
 ```
+
+and share folders through
+
+Click "Options", then "Share folders", then select the local folder that you want to access in remote server. Then the folder will be automatically "/home/<user>/tsclient/<foldername>", so you can read and write to this folder and access it from remote server.
 
 ## Unix Tutorial
 
