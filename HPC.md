@@ -28,6 +28,9 @@ Table of Contents
 ## Use VDI
 
 Follow the following instruction to install VMWare
+(https://beyond.chop.edu)[https://beyond.chop.edu]
+
+Obsolete link:
 [https://wiki.chop.edu/pages/viewpage.action?pageId=238785326](https://wiki.chop.edu/pages/viewpage.action?pageId=238785326)
 
 The new cluster login-node pool is **RES-RHEL-HPC-2**
@@ -38,6 +41,12 @@ The documentation (including purpose and scope of the change) is here: https://w
 I recommend you view the video and page here: https://wiki.chop.edu/display/RISUD/%28BETA%29+Moving+From+UGE+-%3E+Slurm
 Full slurm scheduling docs for our cluster: https://wiki.chop.edu/pages/viewpage.action?pageId=261751857
 The replacement for jupyterhub is documented here: https://wiki.chop.edu/pages/viewpage.action?pageId=261751861
+
+You can use firefox in VDI through
+
+wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/95.0.2/linux-x86_64/en-US/firefox-95.0.2.tar.bz2
+tar xaf firefox-95.0.2.tar.bz2
+./firefox/firefox
 
 ## Unix Tutorial
 
