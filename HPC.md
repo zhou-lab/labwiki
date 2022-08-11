@@ -168,6 +168,7 @@ Pipe in
 ```
 cat <<'EOF' | sbatch
 #!/bin/bash
+. ~/.bashrc
 <your command>
 EOF
 ```
@@ -175,6 +176,7 @@ You can also pipe into both a file and sbatch (so that you keep a record)
 ```
 cat <<'EOF' | tee <your file name> | sbatch
 #!/bin/bash
+. ~/.bashrc
 <your command>
 EOF
 ```
@@ -192,6 +194,8 @@ Rscript <<'EOF2'
 EOF2
 EOF
 ```
+  
+Note that the sbatch doesn't recognized aliases and addition to .bashrc / .profile. One needs to call ". ~/.bashrc" explicitly
 
 ## pbsgen-style submission
 
