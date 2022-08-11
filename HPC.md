@@ -51,7 +51,7 @@ tar xaf firefox-95.0.2.tar.bz2
 ./firefox/firefox
 ```
 
-and share folders through
+and share folders through (only works with Horizon 7 on personal computer).
 
 Click "Preferences"/"Options", then "Drive Sharing"/"Share folders", then select the local folder that you want to access in remote server. Then the folder will be automatically "/home/<user>/tsclient/<foldername>", so you can read and write to this folder and access it from remote server.
 
