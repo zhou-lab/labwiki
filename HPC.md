@@ -173,8 +173,8 @@ EOF
 ```
 You can also pipe into both a file and sbatch (so that you keep a record)
 ```
-#!/bin/bash
 cat <<'EOF' | tee <your file name> | sbatch
+#!/bin/bash
 <your command>
 EOF
 ```
