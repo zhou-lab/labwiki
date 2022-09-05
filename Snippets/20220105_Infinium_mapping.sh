@@ -54,11 +54,9 @@ function runpipe1 {
   biscuit_mapping_thread5
   format_mapping_InfiniumI
   format_mapping_InfiniumII
-  validate_Infinium
-  ~/repo/labwiki/Snippets/20220105_Infinium_mapping_mergeV2.R $TMPFDR ref $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz NA
-  count_manifest
-  ~/repo/labwiki/Snippets/20220105_build_sesameAddress.R $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz RDS_ordering/${PLATFORM}_${REFCODE}.rds
-  ~/repo/labwiki/Snippets/20220105_build_sesameAddressGR.R $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz RDS_GRanges/${PLATFORM}_${REFCODE}.rds decoy
+  validate_Infinium             # create validation drawings
+  ~/repo/labwiki/Snippets/20220105_Infinium_mapping_mergeV2.R $TMPFDR ref $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz NA # build manifest.tsv.gz
+  count_manifest                # validate the manifest counts
   set_features_$REFCODE
   buildFeatureOverlaps
   buildFeatureGene
@@ -232,6 +230,10 @@ function count_manifest {
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1' | awk '$9~/cg/{split($9,a,"_"); aa=substr(a[2],2,1); if(aa=="C") { if((and($10,0x10) && $18=="f") || (!and($10,0x10) && $18=="r")) {ok="ok";}else{ok="not ok";} } if(aa=="O") { if((!and($10,0x10) && $18=="f") || (and($10,0x10) && $18=="r")) {ok="ok";}else{ok="not ok";} } print aa,$10,$18,ok;}' | sort | uniq -c
   echo "Check 1/2 tag (only valid when using the new ID system):"
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1&&$9~/cg/{if($5=="NA"){st="II";}else{st="I";} split($9,a,"_"); aa=substr(a[2],3,1); if(aa==1){bb="I";} else {bb="II";} if(st==bb){ok="ok";}else{ok="not ok";} print st,bb,ok;}' | sort | uniq -c
+}
+
+function set_features_hg19 {
+ :
 }
 
 function set_features_hg38 {

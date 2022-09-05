@@ -49,12 +49,15 @@ df4 <- with(df3, tibble(
     Probe_ID = probeID,
     mapFlag_A = flagA, mapChrm_A = samChrmA, mapPos_A = samPosA, mapQ_A = mapqA, 
     mapCigar_A = cigarA, AlleleA_ProbeSeq = p2seqA[probeID],
-    mapNM_A = as.integer(str_replace(nmA, "NM:i:","")), mapAS_A = as.integer(str_replace(asA, "AS:i:","")), mapYD_A = str_replace(ydA, "YD:A:",""), 
+    mapNM_A = suppressWarnings(as.integer(str_replace(nmA, "NM:i:",""))),
+    mapAS_A = as.integer(str_replace(asA, "AS:i:","")),
+    mapYD_A = str_replace(ydA, "YD:A:",""), 
     mapFlag_B = flagB, mapChrm_B = samChrmB, mapPos_B = samPosB, mapQ_B = mapqB, 
     mapCigar_B = cigarB, AlleleB_ProbeSeq = p2seqB[probeID],
-    mapNM_B = as.integer(str_replace(nmB, "NM:i:","")), mapAS_B = as.integer(str_replace(asB, "AS:i:","")), mapYD_B = str_replace(ydB, "YD:A:",""), 
+    mapNM_B = suppressWarnings(as.integer(str_replace(nmB, "NM:i:",""))),
+    mapAS_B = as.integer(str_replace(asB, "AS:i:","")),
+    mapYD_B = str_replace(ydB, "YD:A:",""), 
     type = type))
-
 df4$CpG_chrm[df4$CpG_chrm == "*"] <- NA
 
 df44 <- read_tsv("fa/standard_input_control.tsv",
