@@ -60,35 +60,13 @@ function create_mask_snp {
 }
 
 function merge_masks_hg38dbSNP20180418 {
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNP5_5pt"||a[i]=="M_typeINextBaseSwitch"||a[i]=="M_extBase"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
 function merge_masks_mm10dbSNP142 {
   echo "=== mask/${PLATFORM}.${REFCODE}.mask.tsv.gz"
   cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
-  echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
-}
-
-function create_masks_hg38dbSNP20180418 {
-  create_masks_step1
-  SNP=~/references/hg38/dbsnp/common_all_20180418.snp.bed.gz
-  SNP=~/references/hg38/dbsnp/snp_bed_standard/SNPcommon_5pt.bed.gz
-  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$13!="."&&$13>=0.01{if($4=="-"){d=$8-$2;}else{d=$3-$9;} print $5,"MASK_SNP5_1pt;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_commonsnp5.tsv
-  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$13!="."&&$13>=0.05{if($4=="-"){d=$8-$2;}else{d=$3-$9;} print $5,"MASK_SNP5_5pt;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_commonsnp5_5.tsv
-  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} if($5=="NA"){type="II";}else{type="I";} print $11,$12-1,$12+49,st,$9,$18,type;}' | awk '$4=="+"{$2=$3;$3=$3+1;print;}$4=="-"{$3=$2;$2=$2-1;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$14!="."&&$14>0.01{print $5,$11";"$12$13";"$6";"$7";"$14,$12,$13,$6,$7;}' >$TMPFDR/tmp_mask_extBase.tsv
-  awk '$6=="I"{if($5=="f"){if($3=="C")$3="T";if($4=="C")$4="T";} if($5=="r"){if($3=="G")$3="A";if($4=="G")$4="A";} if(($3~/[CG]/ && $4~/[TA]/)||($4~/[CG]/ && $3~/[TA]/)) {print $1,"MASK_typeINextBaseSwitch;"$2;}}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_typeIswitch.tsv
-  awk '$6=="II"{print $1,"MASK_extBase;"$2;}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_extBase.tsv
-}
-
-function create_masks_mm10dbSNP142 {
-  create_masks_step1
-  SNP=~/references/mm10/annotation/snp/mgp.v5.merged.snps_all.dbSNP142.bed.gz
-  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '{if($4=="-"){d=$8-$2;}else{d=$3-$9;} if($10=="."){$10="rs_"$7":"$9;} print $5,"MASK_SNP5;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_snp.tsv
-  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} if($5=="NA"){type="II";}else{type="I";} print $11,$12-1,$12+49,st,$9,$18,type;}' | awk '$4=="+"{$2=$3;$3=$3+1;print;}$4=="-"{$3=$2;$2=$2-1;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '{if($11=="."){$11="rs_"$8":"$10;}print $5,$11";"$12$13";"$6";"$7";"$14,$12,$13,$6,$7;}' >$TMPFDR/tmp_mask_extBase.tsv
-  awk '$6=="I"{if($5=="f"){if($3=="C")$3="T";if($4=="C")$4="T";} if($5=="r"){if($3=="G")$3="A";if($4=="G")$4="A";} if(($3~/[CG]/ && $4~/[TA]/)||($4~/[CG]/ && $3~/[TA]/)) {print $1,"MASK_typeINextBaseSwitch;"$2;}}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_typeIswitch.tsv
-  awk '$6=="II"{print $1,"MASK_extBase;"$2;}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_extBase.tsv
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tMASK_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="MASK_mapping"||a[i]=="MASK_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
