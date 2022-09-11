@@ -1,31 +1,3 @@
-function test_export {
-  ## ex1
-  export BISCUIT_FASTA=~/references/hg19/biscuit/hg19.fa
-  export BASEDIR=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest
-  export REFCODE=hg19
-  export PLATFORM=EPIC+
-  export CSV=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest/csv/EPIC+/CombinedManifestEPIC.manifest.LEGXservices.csv.gz
-  export TMPFDR=$BASEDIR/tmp/${PLATFORM}_${REFCODE}
-
-  ## ex2
-  export BISCUIT_FASTA=~/references/hg19/biscuit/hg19.fa
-  export BASEDIR=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest
-  export REFCODE=hg19
-  export PLATFORM=HM27
-  export CSV=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest/csv/HM27/GPL8490_HumanMethylation27_270596_v.1.2.csv.gz
-  export TMPFDR=$BASEDIR/tmp/${PLATFORM}_${REFCODE}
-  export parser=HM27
-
-  ## ex3
-  export BISCUIT_FASTA=~/references/hg38/biscuit/hg38.fa
-  export BASEDIR=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest
-  export REFCODE=hg38
-  export PLATFORM=Mammal40
-  export CSV=~/zhou_lab/projects/20220822_rebuild_Infinium_array_manifest/csv/Mammal40/HorvathMammal40.CanonicalManifest.3.2019.manifest.csv
-  export TMPFDR=$BASEDIR/tmp/${PLATFORM}_${REFCODE}
-  export parser=Mammal40
-}
-
 function set_environment {
   export BISCUIT_FASTA=$1
   export BASEDIR=$2
@@ -35,11 +7,12 @@ function set_environment {
   export parser=$6              # which parser to use
   export GMGTF=$7               # gene model gtf.gz
   export GMCODE=$8              # gene model name we should call the gene annotation file
+  export SNPMERGER=$9
   export TMPFDR=$BASEDIR/tmp/${PLATFORM}_${REFCODE}
 }
 
 function run_pipeline_build_Infinium_20220823() ( ## note that fun() (...) runs in a subshell
-  set_environment $1 $2 $3 $4 $5 $6 $7 $8
+  set_environment $1 $2 $3 $4 $5 $6 $7 $8 $9
   cd $BASEDIR
   rm -rf $TMPFDR
 
@@ -57,9 +30,66 @@ function runpipe1 {
   validate_Infinium             # create validation drawings
   ~/repo/labwiki/Snippets/20220105_Infinium_mapping_mergeV2.R $TMPFDR ref $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz NA # build manifest.tsv.gz
   count_manifest                # validate the manifest counts
+  
   set_features_$REFCODE
   buildFeatureOverlaps
   buildFeatureGene
+  
+  create_masks_step1
+  for SNP in ~/references/$REFCODE/annotation/snp/snp_bed_standard/*; do create_mask_snp; done
+  merge_masks_$SNPMERGER
+}
+
+function create_masks_step1 {
+  echo "=== Create masks ===="
+  rm -f $TMPFDR/mask_*
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk '$9~/^uk/' | awk '{print $9,"M_designUK";}' >$TMPFDR/mask_designUK.tsv
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk '$9~/^c[gh]/' | awk '$1=="NA"||$17=="NA"||$17<35||($26!="NA"&&$26<35)||($21!="NA"&&$12!=$21)' | awk '{print $9,"M_mapping"}' >$TMPFDR/mask_mapping.tsv
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk '$9~/^c[gh]/' | awk 'NR==FNR{a[$1]}NR!=FNR&&!($9 in a)' $TMPFDR/mask_mapping.tsv - | sortbed | gzip -c >$TMPFDR/cg_and_ch.bed.gz
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '$13<=10||($22!="NA"&&$22<=10){print $9,"M_nonuniq"}' >$TMPFDR/mask_nonunique.tsv
+}
+
+
+function create_mask_snp {
+  echo "=== Create SNP masks "$SNP
+  mname=$(basename $SNP .bed.gz)
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk -v mname=$mname '{if($4=="-"){d=$8-$2;}else{d=$3-$9;} print $5,"M_"mname";"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_$mname.tsv
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} if($5=="NA"){type="II";}else{type="I";} print $11,$12-1,$12+49,st,$9,$18,type;}' | awk '$4=="+"{$2=$3;$3=$3+1;print;}$4=="-"{$3=$2;$2=$2-1;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '{print $5,$11";"$12$13";"$6";"$7";"$14,$12,$13,$6,$7;}' >$TMPFDR/tmp_maskExtention_$mname.tsv
+  awk -v mname=$mname '$6=="I"{if($5=="f"){if($3=="C")$3="T";if($4=="C")$4="T";} if($5=="r"){if($3=="G")$3="A";if($4=="G")$4="A";} if(($3~/[CG]/ && $4~/[TA]/)||($4~/[CG]/ && $3~/[TA]/)) {print $1,"M_1baseSwitch"mname";"$2;}}' $TMPFDR/tmp_maskExtention_$mname.tsv >$TMPFDR/mask_${mname}_1baseSwitch.tsv
+  awk -v mname=$mname '$6=="II"{print $1,"M_2extBase_"mname";"$2;}' $TMPFDR/tmp_maskExtention_$mname.tsv >$TMPFDR/mask_${mname}_2extBase.tsv
+}
+
+function merge_masks_hg38dbSNP20180418 {
+  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNP5_5pt"||a[i]=="M_typeINextBaseSwitch"||a[i]=="M_extBase"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
+}
+
+function merge_masks_mm10dbSNP142 {
+  echo "=== mask/${PLATFORM}.${REFCODE}.mask.tsv.gz"
+  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
+}
+
+function create_masks_hg38dbSNP20180418 {
+  create_masks_step1
+  SNP=~/references/hg38/dbsnp/common_all_20180418.snp.bed.gz
+  SNP=~/references/hg38/dbsnp/snp_bed_standard/SNPcommon_5pt.bed.gz
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$13!="."&&$13>=0.01{if($4=="-"){d=$8-$2;}else{d=$3-$9;} print $5,"MASK_SNP5_1pt;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_commonsnp5.tsv
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$13!="."&&$13>=0.05{if($4=="-"){d=$8-$2;}else{d=$3-$9;} print $5,"MASK_SNP5_5pt;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_commonsnp5_5.tsv
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} if($5=="NA"){type="II";}else{type="I";} print $11,$12-1,$12+49,st,$9,$18,type;}' | awk '$4=="+"{$2=$3;$3=$3+1;print;}$4=="-"{$3=$2;$2=$2-1;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '$14!="."&&$14>0.01{print $5,$11";"$12$13";"$6";"$7";"$14,$12,$13,$6,$7;}' >$TMPFDR/tmp_mask_extBase.tsv
+  awk '$6=="I"{if($5=="f"){if($3=="C")$3="T";if($4=="C")$4="T";} if($5=="r"){if($3=="G")$3="A";if($4=="G")$4="A";} if(($3~/[CG]/ && $4~/[TA]/)||($4~/[CG]/ && $3~/[TA]/)) {print $1,"MASK_typeINextBaseSwitch;"$2;}}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_typeIswitch.tsv
+  awk '$6=="II"{print $1,"MASK_extBase;"$2;}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_extBase.tsv
+}
+
+function create_masks_mm10dbSNP142 {
+  create_masks_step1
+  SNP=~/references/mm10/annotation/snp/mgp.v5.merged.snps_all.dbSNP142.bed.gz
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} print $11,$12-1,$12+49,st,$9,$18;}' | awk '$4=="+"{$2=$3-5;print;}$4=="-"{$3=$2+5;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '{if($4=="-"){d=$8-$2;}else{d=$3-$9;} if($10=="."){$10="rs_"$7":"$9;} print $5,"MASK_SNP5;"$10";"$11$12";"$6";"d";"$13;}' >$TMPFDR/mask_snp.tsv
+  zcat $TMPFDR/cg_and_ch.bed.gz | awk '{if(and($10,0x10)){st="-";} else {st="+";} if($5=="NA"){type="II";}else{type="I";} print $11,$12-1,$12+49,st,$9,$18,type;}' | awk '$4=="+"{$2=$3;$3=$3+1;print;}$4=="-"{$3=$2;$2=$2-1;print;}' | sortbed | bedtools intersect -a - -b $SNP -sorted -wo -sorted | awk '{if($11=="."){$11="rs_"$8":"$10;}print $5,$11";"$12$13";"$6";"$7";"$14,$12,$13,$6,$7;}' >$TMPFDR/tmp_mask_extBase.tsv
+  awk '$6=="I"{if($5=="f"){if($3=="C")$3="T";if($4=="C")$4="T";} if($5=="r"){if($3=="G")$3="A";if($4=="G")$4="A";} if(($3~/[CG]/ && $4~/[TA]/)||($4~/[CG]/ && $3~/[TA]/)) {print $1,"MASK_typeINextBaseSwitch;"$2;}}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_typeIswitch.tsv
+  awk '$6=="II"{print $1,"MASK_extBase;"$2;}' $TMPFDR/tmp_mask_extBase.tsv >$TMPFDR/mask_extBase.tsv
+  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tMASK_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="MASK_mapping"||a[i]=="MASK_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
 function csv2standard_input_tsv_HM27 {
@@ -241,7 +271,7 @@ function set_features_hg38 {
 }
 
 function set_features_mm10 {
-  export FEATURES="ChromHMM.20220414"
+  export FEATURES="Blacklist.20220304 ChromHMM.20220414 rmsk1.20220321 rmsk2.20220321 Tetranuc4.20220321 CGI.20220904"
 }
 
 function buildFeatureOverlaps {
@@ -249,6 +279,8 @@ function buildFeatureOverlaps {
   echo "=== Create annotation files ===="
   mkdir -p $TMPFDR
   mkdir -p features/${PLATFORM}_${REFCODE}/
+  rm -f features/${PLATFORM}_${REFCODE}/*
+  
   [[ -f tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz ]] || exit 1;
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1&&$1!="NA"&&$9~/^c[gh]/' | sortbed >$TMPFDR/${PLATFORM}_${REFCODE}.bed
   
@@ -267,9 +299,10 @@ function buildFeatureOverlaps {
 
 function buildFeatureGene {
   echo "=== Create gene annotation file ===="
+  mkdir -p gene_assoc
   zcat $GMGTF | awk '(!/^#/)&&$3=="transcript"{match($9,/gene_name "([^"]*)"/, genename); match($9,/transcript_id "([^"]*)"/, transid); match($9,/transcript_type "([^"]*)"/, transcripttype); print $1,$4,$5,$7,genename[1],transcripttype[1],transid[1]}' | awk -f wanding.awk -e '$4=="+"{print $1,max($2-1500,0),$3,joinr(4,7),$2}$4=="-"{print $1,max($2,0),$3+1500,joinr(4,7),$3}' | sortbed >$TMPFDR/$GMCODE.wtss1500.bed
   
-  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1 && $1!="NA"{if(and($10, 0x10))s="-"; else s="+";print $1,$2,$3,s,$9;}' | sortbed | bedtools intersect -a - -b $TMPFDR/$GMCODE.wtss1500.bed -sorted -loj | awk '$10!="."{if ($9=="+") a=$2+1-$13; else a=$13-$2; b=$6":"$7"-"$8$9; print $1,$2+1,$3,$4,$5,$10,$11,$12,a,b}' | sort -k1,1 -k2,2n -k4,7 | bedtools groupby -i - -g 1-4 -c 5,6,6,7,8,9 -o distinct,distinct,collapse,collapse,collapse,collapse -delim ";" | awk -f wanding.awk -e 'NR==FNR{gene[$5]=joinr(6,10)}NR!=FNR&&FNR>1{if($9 in gene){g=gene[$9];}else{g="NA\tNA\tNA\tNA\tNA"} if(and($10,0x10)) {st="-";}else{st="+";} print $1,$2,$3,st,$9,g;}' - <(zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz) | awk -f wanding.awk -e 'BEGIN{print "CpG_chrm\tCpG_beg\tCpG_end\tprobe_strand\tprobeID\tgenesUniq\tgeneNames\ttranscriptTypes\ttranscriptIDs\tdistToTSS"}1' | gzip -c >features/${PLATFORM}_${REFCODE}/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
-  echo "Created: "features/${PLATFORM}_${REFCODE}/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1 && $1!="NA"{if(and($10, 0x10))s="-"; else s="+";print $1,$2,$3,s,$9;}' | sortbed | bedtools intersect -a - -b $TMPFDR/$GMCODE.wtss1500.bed -sorted -loj | awk '$10!="."{if ($9=="+") a=$2+1-$13; else a=$13-$2; b=$6":"$7"-"$8$9; print $1,$2+1,$3,$4,$5,$10,$11,$12,a,b}' | sort -k1,1 -k2,2n -k4,7 | bedtools groupby -i - -g 1-4 -c 5,6,6,7,8,9 -o distinct,distinct,collapse,collapse,collapse,collapse -delim ";" | awk -f wanding.awk -e 'NR==FNR{gene[$5]=joinr(6,10)}NR!=FNR&&FNR>1{if($9 in gene){g=gene[$9];}else{g="NA\tNA\tNA\tNA\tNA"} if(and($10,0x10)) {st="-";}else{st="+";} print $1,$2,$3,st,$9,g;}' - <(zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz) | awk -f wanding.awk -e 'BEGIN{print "CpG_chrm\tCpG_beg\tCpG_end\tprobe_strand\tprobeID\tgenesUniq\tgeneNames\ttranscriptTypes\ttranscriptIDs\tdistToTSS"}1' | gzip -c >gene_assoc/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
+  echo "Created: "gene_assoc/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
 }
 
