@@ -89,8 +89,8 @@ function csv2standard_input_tsv_EPIC {
   mkdir -p $TMPFDR/fa
   cd $TMPFDR/fa
   zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{print $1,$7,$3,$4,$5,$6}' >standard_input.tsv
-  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
-  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
   cd $BASEDIR
 }
 
@@ -125,8 +125,8 @@ function csv2standard_input_tsv_EPICv2draft {
   cd $TMPFDR/fa
   # 1:cgNumber, 2:I/II, 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AlleleB_ID, 6:AlelleB_ProbeSeq
   zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{print $1,$15,$3,$4,$5,$6}' >standard_input.tsv
-  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
-  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
   cd $BASEDIR
 }
 
@@ -245,7 +245,7 @@ function set_features_hg19 {
 }
 
 function set_features_hg38 {
-  export FEATURES="Blacklist.20220304 ChromHMM.20220303 H3K9me3HighConfidence.20220801 ImprintingDMR.20220818 rmsk1.20220307 rmsk2.20220321 Tetranuc2.20220321 CGI.20220904"
+  export FEATURES="Blacklist.20220304 ChromHMM.20220303 H3K9me3HighConfidence.20220801 ImprintingDMR.20220818 rmsk1.20220307 rmsk2.20220321 Tetranuc2.20220321 CGI.20220904 CTCFbind.20220911 REMCChromHMM.20220911"
 }
 
 function set_features_mm10 {
@@ -264,7 +264,7 @@ function buildFeatureOverlaps {
   
   for f in $FEATURES; do
     echo -n Processing feature $f;
-    bedtools intersect -b $TMPFDR/${PLATFORM}_${REFCODE}.bed -a ~/references/${REFCODE}/features/$f.bed.gz -sorted -wo | awk 'BEGIN{print "Probe_ID\tKnowledgebase"}{print $14,$4;}' | gzip -c >features/${PLATFORM}_${REFCODE}/$f.gz
+    bedtools intersect -b $TMPFDR/${PLATFORM}_${REFCODE}.bed -a ~/references/${REFCODE}/features/$f.bed.gz -sorted -wo | awk 'BEGIN{print "Probe_ID\tKnowledgebase"}{print $14,$4;}' | sort | uniq | gzip -c >features/${PLATFORM}_${REFCODE}/$f.gz
     echo " (captured" $(zcat features/${PLATFORM}_${REFCODE}/$f.gz | wc -l) "rows)"
   done
 
@@ -272,7 +272,8 @@ function buildFeatureOverlaps {
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print $9,"Knowledgebase";}NR>1{print $9,"ProbeType;"substr($9,1,2);}' | gzip -c >features/${PLATFORM}_${REFCODE}/ProbeType.gz
   echo " (captured the following probe types)"
   zcat features/${PLATFORM}_${REFCODE}/ProbeType.gz | awk 'NR>1' | cut -f2 | uniq -c
-  echo "Finished processing all features."
+  tar -zcvf features/${PLATFORM}.${REFCODE}.annotations.tar.gz features/${PLATFORM}_${REFCODE}/
+  echo "Finished processing all features. Write: "features/${PLATFORM}.${REFCODE}.annotations.tar.gz
 }
 
 function buildFeatureGene {
