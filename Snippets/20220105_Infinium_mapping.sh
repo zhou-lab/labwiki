@@ -269,9 +269,9 @@ function buildFeatureOverlaps {
   done
 
   echo -n Processing probe type;
-  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print $9,"Knowledgebase";}NR>1{print $9,"ProbeType;"substr($9,1,2);}' | gzip -c >features/${PLATFORM}_${REFCODE}/ProbeType.gz
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print $9,"Knowledgebase";}NR>1{print $9,"ProbeType;"substr($9,1,2);}' | gzip -c >features/${PLATFORM}_${REFCODE}/ProbeType.$(date +%Y%m%d).gz
   echo " (captured the following probe types)"
-  zcat features/${PLATFORM}_${REFCODE}/ProbeType.gz | awk 'NR>1' | cut -f2 | uniq -c
+  zcat features/${PLATFORM}_${REFCODE}/ProbeType.$(date +%Y%m%d).gz | awk 'NR>1' | cut -f2 | uniq -c
   tar -zcvf features/${PLATFORM}.${REFCODE}.annotations.tar.gz features/${PLATFORM}_${REFCODE}/
   echo "Finished processing all features. Write: "features/${PLATFORM}.${REFCODE}.annotations.tar.gz
 }
