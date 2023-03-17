@@ -1,3 +1,5 @@
+#NOTE: Run on compute node with 110GB of RAM (Srun24) if building overlaps with large feature files such as TFBSrm.20221005.bed.gz
+
 function set_environment {
   export BISCUIT_FASTA=$1
   export BASEDIR=$2
@@ -252,6 +254,8 @@ function set_features_mm10 {
   export FEATURES="Blacklist.20220304 ChromHMM.20220414 rmsk1.20220321 rmsk2.20220321 Tetranuc4.20220321 CGI.20220904"
 }
 
+
+#NOTE: Run on compute node with 110GB of RAM (Srun24) if building overlaps with large feature files such as TFBSrm.20221005.bed.gz
 function buildFeatureOverlaps {
 
   echo "=== Create annotation files ===="
