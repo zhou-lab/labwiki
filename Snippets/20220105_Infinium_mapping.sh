@@ -266,7 +266,7 @@ function buildFeatureOverlaps {
   [[ -f tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz ]] || exit 1;
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1&&$1!="NA"&&$9~/^c[gh]/' | sortbed >$TMPFDR/${PLATFORM}_${REFCODE}.bed
   
-  for f in $FEATURES; do
+  for f in ${FEATURES[@]}; do
     echo -n Processing feature $f;
     bedtools intersect -b $TMPFDR/${PLATFORM}_${REFCODE}.bed -a ~/references/${REFCODE}/features/$f.bed.gz -sorted -wo | awk 'BEGIN{print "Probe_ID\tKnowledgebase"}{print $14,$4;}' | sort | uniq | gzip -c >features/${PLATFORM}_${REFCODE}/$f.gz
     echo " (captured" $(zcat features/${PLATFORM}_${REFCODE}/$f.gz | wc -l) "rows)"
