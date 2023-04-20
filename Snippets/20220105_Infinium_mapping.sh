@@ -1,3 +1,5 @@
+#NOTE: Run on compute node with 110GB of RAM (Srun24) if building overlaps with large feature files such as TFBSrm.20221005.bed.gz
+
 function set_environment {
   export BISCUIT_FASTA=$1
   export BASEDIR=$2
@@ -334,8 +336,16 @@ TFBSrm.20221005
 "
 }
 
+<<<<<<< HEAD
 function buildFeatureGenome {
   echo "=== Create genome-based annotation files ===="
+=======
+
+#NOTE: Run on compute node with 110GB of RAM (Srun24) if building overlaps with large feature files such as TFBSrm.20221005.bed.gz
+function buildFeatureOverlaps {
+
+  echo "=== Create annotation files ===="
+>>>>>>> e46b702e7ce2d06377d0e73b13f958748a8ca381
   mkdir -p $TMPFDR
   mkdir -p features/${PLATFORM}/${REFCODE}/
   rm -f features/${PLATFORM}/${REFCODE}/*
@@ -371,6 +381,7 @@ function buildFeatureStudy {
     done
   done
 
+<<<<<<< HEAD
   echo "Finished processing all study annotations."
 }
 
@@ -392,6 +403,14 @@ function buildFeatureTechnical {
 
   ## turn masks into KYCG knowledgebases
   zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk 'BEGIN{print "Probe_ID\tKnowledgebase";}NR>1{split($3,a,","); for(i in a) {print $1,"Mask;"a[i];}}' | gzip -c >features/${PLATFORM}/Technical/Mask_${REFCODE}.gz
+=======
+  echo -n Processing probe type;
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print $9,"Knowledgebase";}NR>1{print $9,"ProbeType;"substr($9,1,2);}' | gzip -c >features/${PLATFORM}_${REFCODE}/ProbeType.$(date +%Y%m%d).gz
+  echo " (captured the following probe types)"
+  zcat features/${PLATFORM}_${REFCODE}/ProbeType.$(date +%Y%m%d).gz | awk 'NR>1' | cut -f2 | uniq -c
+  tar -zcvf features/${PLATFORM}.${REFCODE}.annotations.tar.gz features/${PLATFORM}_${REFCODE}/
+  echo "Finished processing all features. Write: "features/${PLATFORM}.${REFCODE}.annotations.tar.gz
+>>>>>>> e46b702e7ce2d06377d0e73b13f958748a8ca381
 }
 
 function buildFeatureGene {
