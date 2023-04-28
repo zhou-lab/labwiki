@@ -113,6 +113,8 @@ We have the follow repo cloned to `/mnt/isilon/zhoulab/labpipelines` for job sub
 
 Alias are defined in `/mnt/isilon/zhoulab/labtools/bashrc/chop/bashrc_hpc_zhoulab` for quick job submission, deletion, monitoring
 
+`Srun2` will get a node with 2 cores interatively. We commonly used `Srun8` or `Srun24`.
+  
 These are just mnemonics for those from torque/UGE environment
 ```
 alias qstat="squeue --me"
