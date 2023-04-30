@@ -1,2 +1,3 @@
-# labwiki
-lab wiki
+# Lab wiki of the Zhou lab
+
+
