@@ -52,12 +52,12 @@ function runpipe1 {
   validate_Infinium             # create validation drawings
   ~/repo/labwiki/Snippets/20220105_Infinium_mapping_mergeV2.R $TMPFDR ref $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz NA # build manifest.tsv.gz
   count_manifest $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz # validate the manifest counts
-  set_features_$REFCODE
   
   create_masks_step1
   for SNP in ~/references/$REFCODE/annotation/snp/snp_bed_standard/*; do create_mask_snp; done
   merge_masks_$SNPMERGER
 
+  set_features_$REFCODE
   buildFeatureGenome
   buildFeatureTechnical
   buildFeatureStudy
@@ -83,13 +83,13 @@ function create_mask_snp {
 }
 
 function merge_masks_hg38dbSNP20180418 {
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
 function merge_masks_mm10dbSNP142 {
   echo "=== mask/${PLATFORM}.${REFCODE}.mask.tsv.gz"
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
@@ -146,7 +146,7 @@ function csv2standard_input_tsv_EPICv2draft {
   # column requirement:
   mkdir -p $TMPFDR/fa
   cd $TMPFDR/fa
-  # 1:cgNumber, 2:I/II, 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AlleleB_ID, 6:AlelleB_ProbeSeq
+  # 1:IlmnID (cgNumber with suffix), 2:Name (cgNumber), 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AddressB_ID, 6:AlleleB_ProbeSeq
   zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{print $1,$15,$3,$4,$5,$6}' >standard_input.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
@@ -325,6 +325,7 @@ function set_features_mm10 {
 Blacklist.20220304
 CGI.20220904
 ChromHMM.20220318
+Chromosome.20221129
 EnsRegBuild.20220710
 HM.20221013
 MetagenePC.20220911
@@ -333,6 +334,7 @@ PMD.20220911
 rmsk1.20220321
 rmsk2.20220321
 Tetranuc2.20220321
+Tetranuc4.20220321
 TFBSrm.20221005
 "
 }
@@ -353,7 +355,7 @@ function buildFeatureGenome {
     for ff in ~/references/${REFCODE}/features/${f}*.bed.gz; do
       fname=$(basename $ff .bed.gz)
       bedtools intersect -b $TMPFDR/${PLATFORM}_${REFCODE}.bed -a $ff -sorted -wo | awk 'BEGIN{print "Probe_ID\tKnowledgebase"}{print $14,$4;}' | sort | uniq | gzip -c >features/${PLATFORM}/${REFCODE}/$fname.gz
-      echo "  1 file captured" $(zcat features/${PLATFORM}/${REFCODE}/$fname.gz | wc -l) "rows)"
+      echo "  1 file captured" $(zcat features/${PLATFORM}/${REFCODE}/$fname.gz | wc -l) "rows."
     done
   done
 
