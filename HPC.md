@@ -299,7 +299,7 @@ It'd be better you follow the nomenclature starting with a date when creating yo
 Please document every command needed and working directory for analysis. Create your git repository in `~/zhoulab/labprojects`. See my in `zhouw3` for some examples.
 
 ```
-cd `/zhoulab/labprojects
+cd ~/zhoulab/labprojects
 mkdir <CHOPID>
 cd <CHOPID>
 git init
