@@ -189,6 +189,18 @@ function csv2standard_input_tsv_MM285 {
   cd $BASEDIR
 }
 
+function csv2standard_input_tsv_LEGX {
+  # requirement: csvtk
+  # column requirement:
+  mkdir -p $TMPFDR/fa
+  cd $TMPFDR/fa
+  # 1:ProbeID, 2:I/II inferred from AddressA_ID, 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AlleleB_ID, 6:AlelleB_ProbeSeq
+  zcat -f $CSV | awk 'NR>1 && !($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,type,$3,$15,$2,$16}' >standard_input.tsv
+  zcat -f $CSV | awk 'NR>1 &&  ($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,$3,$2,"NA",type}' >standard_input_control.tsv
+  zcat -f $CSV | awk 'NR>1 &&  ($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,$3,"NA","NA","NA","NA";}' >standard_input_control_anno.tsv
+  cd $BASEDIR
+}
+
 function prepare_fa {
   cd $TMPFDR/fa
   echo "=== Prepare FASTA ==="
@@ -349,7 +361,7 @@ function buildFeatureGenome {
   [[ -f tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz ]] || exit 1;
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1&&$1!="NA"&&$9~/^c[gh]/' | sortbed >$TMPFDR/${PLATFORM}_${REFCODE}.bed
   
-  for f in $FEATURES; do
+  for f in ${FEATURES[@]}; do
     echo Processing feature $f;
     # to capture all file parts
     for ff in ~/references/${REFCODE}/features/${f}*.bed.gz; do
@@ -392,7 +404,7 @@ function buildFeatureTechnical {
 
   ## turn Infinium chemistry into KYCG knowledgebases
   echo -n Processing Infinium chemistry
-  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print "Probe_ID\tKnowledgebase";}NR>1{if($7=="NA"){type="II";} else {type="I."$7;} print $9,type;}' | gzip -c >features/${PLATFORM}/Technical/InfiniumChemistry.gz
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print "Probe_ID\tKnowledgebase";}NR>1{if($7=="NA"){type="II";} else {type="I."$7;} print $9,"InfiniumChemistry;"type;}' | gzip -c >features/${PLATFORM}/Technical/InfiniumChemistry.gz
   echo " (captured the following Infinium chemistry)"
   zcat features/${PLATFORM}/Technical/InfiniumChemistry.gz | awk 'NR>1' | cut -f2 | sort | uniq -c
 
@@ -410,3 +422,52 @@ function buildFeatureGene {
   echo "Created: "gene_assoc/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
 }
 
+## Example usage: snp_file_anno tsv_manifest/EPICv2.hg38.manifest.tsv.gz /mnt/isilon/zhoulab/labprojects/20200704_dbSNP_mutation/GRCh38p7_b151/00-common_all_SNPonly.sorted.bed.gz snp_anno/EPICv2.hg38.snp.tsv.gz
+function snp_file_anno {
+  in_manifest=$1
+  snp_file=$2
+  out_file=$3
+  tmp_file=tmp/vcf_format/tmp.bed
+  zcat $in_manifest | awk '$9~/^rs/' | sortbed |
+    bedtools intersect -a - -b <(zcat $snp_file) -loj -sorted | awk -f wanding.awk -e '
+     {if($10=="0") st="+"; else st="-"; probeID=$9; IorII=$28; REF_BYPOS=$6;REF=$33;ALT=$34;
+     if ($32==".") { rsID="NA"; } else { rsID=$32"."$33">"$34; }
+     if (IorII=="I") {
+        U_LAST = substr($15,length($15),1);
+        if (st == "-") { U_LAST = dnarev(U_LAST); }
+        CREF = REF;
+        if (probeID~/_[TB]O/) {
+           if (st == "+" && CREF == "C") CREF="T";
+           if (st == "-" && CREF == "G") CREF="A";
+        } else {
+           if (st == "+" && CREF == "G") CREF="A";
+           if (st == "-" && CREF == "C") CREF="T";
+        }
+        if (U_LAST == CREF && U_LAST != ALT) { U="REF"; } else { U="ALT"; }
+     } else { # type II
+        if (st=="+") {
+           if (REF_BYPOS~/[AGT]/) { U="REF"; REF="AGT"; } else { U="ALT"; REF="C";}
+        } else {
+           if (REF_BYPOS~/[ACT]/) { U="REF"; REF="ACT"; } else { U="ALT"; REF="G";}
+        }
+     }
+     print $1,$2,$3,st,rsID,IorII,U,REF,ALT,probeID;}' >$tmp_file"_1"
+
+  zcat $in_manifest | awk '$6!="NA"' |
+    awk '$9~/^cg/&&$28=="I"{if($10=="0"){$2=$3;} else {$2=$2-1;} $3=$2+1; print $0;}' |
+    sortbed | bedtools intersect -a - -b <(zcat $snp_file) -loj -sorted | awk -f wanding.awk -e '
+     {if($10=="0") st="+"; else st="-"; probeID=$9; IorII=$28; REF_BYPOS=$6; COL=$8;
+     if ($32==".") { rsID="NA"; } else { rsID=$32"."$33">"$34; }
+     U = "REF_InfI";
+     if (probeID~/_[TB]O/) { # assume color channel is G
+        if (st == "+") { REF="G"; ALT="ACT"; } else { REF="C"; ALT="AGT"; }
+     } else {
+        if (st == "+") { REF="C"; ALT="AGT"; } else { REF="G"; ALT="ACT"; }
+     }
+     if (COL=="R") { TMP=REF; REF=ALT; ALT=TMP; } # swap if channel is R
+     print $1,$2,$3,st,rsID,IorII,U,REF,ALT,probeID;}' >$tmp_file"_2"
+
+  cat $tmp_file"_1" $tmp_file"_2" | sortbed |
+    awk 'BEGIN{print "chrm\tbeg\tend\tstrand\trs\tdesignType\tU\tREF\tALT\tProbe_ID";}1' |
+    gzip -c >$out_file
+}
