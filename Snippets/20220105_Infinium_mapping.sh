@@ -52,12 +52,12 @@ function runpipe1 {
   validate_Infinium             # create validation drawings
   ~/repo/labwiki/Snippets/20220105_Infinium_mapping_mergeV2.R $TMPFDR ref $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz NA # build manifest.tsv.gz
   count_manifest $BASEDIR/tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz # validate the manifest counts
-  set_features_$REFCODE
   
   create_masks_step1
   for SNP in ~/references/$REFCODE/annotation/snp/snp_bed_standard/*; do create_mask_snp; done
   merge_masks_$SNPMERGER
 
+  set_features_$REFCODE
   buildFeatureGenome
   buildFeatureTechnical
   buildFeatureStudy
@@ -83,13 +83,13 @@ function create_mask_snp {
 }
 
 function merge_masks_hg38dbSNP20180418 {
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
 function merge_masks_mm10dbSNP142 {
   echo "=== mask/${PLATFORM}.${REFCODE}.mask.tsv.gz"
-  cat $TMPFDR/mask_*.tsv | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
@@ -146,7 +146,7 @@ function csv2standard_input_tsv_EPICv2draft {
   # column requirement:
   mkdir -p $TMPFDR/fa
   cd $TMPFDR/fa
-  # 1:cgNumber, 2:I/II, 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AlleleB_ID, 6:AlelleB_ProbeSeq
+  # 1:IlmnID (cgNumber with suffix), 2:Name (cgNumber), 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AddressB_ID, 6:AlleleB_ProbeSeq
   zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{print $1,$15,$3,$4,$5,$6}' >standard_input.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
@@ -186,6 +186,18 @@ function csv2standard_input_tsv_MM285 {
   zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{if($5=="") type="II"; else type="I"; print $1,type,$3,$4,$5,$6}' >standard_input.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
   zcat -f $CSV | awk -F"," 'a{print "ctl_"$1,$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
+  cd $BASEDIR
+}
+
+function csv2standard_input_tsv_LEGX {
+  # requirement: csvtk
+  # column requirement:
+  mkdir -p $TMPFDR/fa
+  cd $TMPFDR/fa
+  # 1:ProbeID, 2:I/II inferred from AddressA_ID, 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AlleleB_ID, 6:AlelleB_ProbeSeq
+  zcat -f $CSV | awk 'NR>1 && !($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,type,$3,$15,$2,$16}' >standard_input.tsv
+  zcat -f $CSV | awk 'NR>1 &&  ($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,$3,$2,"NA",type}' >standard_input_control.tsv
+  zcat -f $CSV | awk 'NR>1 &&  ($1~/^ct/ || $1~/^uk/){if($16=="NA" || $16=="") type="II"; else type="I"; if ($2=="NA") $2=""; if ($16=="NA") $16=""; print $1,$3,"NA","NA","NA","NA";}' >standard_input_control_anno.tsv
   cd $BASEDIR
 }
 
@@ -325,6 +337,7 @@ function set_features_mm10 {
 Blacklist.20220304
 CGI.20220904
 ChromHMM.20220318
+Chromosome.20221129
 EnsRegBuild.20220710
 HM.20221013
 MetagenePC.20220911
@@ -333,6 +346,7 @@ PMD.20220911
 rmsk1.20220321
 rmsk2.20220321
 Tetranuc2.20220321
+Tetranuc4.20220321
 TFBSrm.20221005
 "
 }
@@ -347,13 +361,13 @@ function buildFeatureGenome {
   [[ -f tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz ]] || exit 1;
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR>1&&$1!="NA"&&$9~/^c[gh]/' | sortbed >$TMPFDR/${PLATFORM}_${REFCODE}.bed
   
-  for f in $FEATURES; do
+  for f in ${FEATURES[@]}; do
     echo Processing feature $f;
     # to capture all file parts
     for ff in ~/references/${REFCODE}/features/${f}*.bed.gz; do
       fname=$(basename $ff .bed.gz)
       bedtools intersect -b $TMPFDR/${PLATFORM}_${REFCODE}.bed -a $ff -sorted -wo | awk 'BEGIN{print "Probe_ID\tKnowledgebase"}{print $14,$4;}' | sort | uniq | gzip -c >features/${PLATFORM}/${REFCODE}/$fname.gz
-      echo "  1 file captured" $(zcat features/${PLATFORM}/${REFCODE}/$fname.gz | wc -l) "rows)"
+      echo "  1 file captured" $(zcat features/${PLATFORM}/${REFCODE}/$fname.gz | wc -l) "rows."
     done
   done
 
@@ -390,7 +404,7 @@ function buildFeatureTechnical {
 
   ## turn Infinium chemistry into KYCG knowledgebases
   echo -n Processing Infinium chemistry
-  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print "Probe_ID\tKnowledgebase";}NR>1{if($7=="NA"){type="II";} else {type="I."$7;} print $9,type;}' | gzip -c >features/${PLATFORM}/Technical/InfiniumChemistry.gz
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print "Probe_ID\tKnowledgebase";}NR>1{if($7=="NA"){type="II";} else {type="I."$7;} print $9,"InfiniumChemistry;"type;}' | gzip -c >features/${PLATFORM}/Technical/InfiniumChemistry.gz
   echo " (captured the following Infinium chemistry)"
   zcat features/${PLATFORM}/Technical/InfiniumChemistry.gz | awk 'NR>1' | cut -f2 | sort | uniq -c
 
@@ -408,3 +422,52 @@ function buildFeatureGene {
   echo "Created: "gene_assoc/${PLATFORM}.${REFCODE}.manifest.${GMCODE}.tsv.gz
 }
 
+## Example usage: snp_file_anno tsv_manifest/EPICv2.hg38.manifest.tsv.gz /mnt/isilon/zhoulab/labprojects/20200704_dbSNP_mutation/GRCh38p7_b151/00-common_all_SNPonly.sorted.bed.gz snp_anno/EPICv2.hg38.snp.tsv.gz
+function snp_file_anno {
+  in_manifest=$1
+  snp_file=$2
+  out_file=$3
+  tmp_file=tmp/vcf_format/tmp.bed
+  zcat $in_manifest | awk '$9~/^rs/' | sortbed |
+    bedtools intersect -a - -b <(zcat $snp_file) -loj -sorted | awk -f wanding.awk -e '
+     {if($10=="0") st="+"; else st="-"; probeID=$9; IorII=$28; REF_BYPOS=$6;REF=$33;ALT=$34;
+     if ($32==".") { rsID="NA"; } else { rsID=$32"."$33">"$34; }
+     if (IorII=="I") {
+        U_LAST = substr($15,length($15),1);
+        if (st == "-") { U_LAST = dnarev(U_LAST); }
+        CREF = REF;
+        if (probeID~/_[TB]O/) {
+           if (st == "+" && CREF == "C") CREF="T";
+           if (st == "-" && CREF == "G") CREF="A";
+        } else {
+           if (st == "+" && CREF == "G") CREF="A";
+           if (st == "-" && CREF == "C") CREF="T";
+        }
+        if (U_LAST == CREF && U_LAST != ALT) { U="REF"; } else { U="ALT"; }
+     } else { # type II
+        if (st=="+") {
+           if (REF_BYPOS~/[AGT]/) { U="REF"; REF="AGT"; } else { U="ALT"; REF="C";}
+        } else {
+           if (REF_BYPOS~/[ACT]/) { U="REF"; REF="ACT"; } else { U="ALT"; REF="G";}
+        }
+     }
+     print $1,$2,$3,st,rsID,IorII,U,REF,ALT,probeID;}' >$tmp_file"_1"
+
+  zcat $in_manifest | awk '$6!="NA"' |
+    awk '$9~/^cg/&&$28=="I"{if($10=="0"){$2=$3;} else {$2=$2-1;} $3=$2+1; print $0;}' |
+    sortbed | bedtools intersect -a - -b <(zcat $snp_file) -loj -sorted | awk -f wanding.awk -e '
+     {if($10=="0") st="+"; else st="-"; probeID=$9; IorII=$28; REF_BYPOS=$6; COL=$8;
+     if ($32==".") { rsID="NA"; } else { rsID=$32"."$33">"$34; }
+     U = "REF_InfI";
+     if (probeID~/_[TB]O/) { # assume color channel is G
+        if (st == "+") { REF="G"; ALT="ACT"; } else { REF="C"; ALT="AGT"; }
+     } else {
+        if (st == "+") { REF="C"; ALT="AGT"; } else { REF="G"; ALT="ACT"; }
+     }
+     if (COL=="R") { TMP=REF; REF=ALT; ALT=TMP; } # swap if channel is R
+     print $1,$2,$3,st,rsID,IorII,U,REF,ALT,probeID;}' >$tmp_file"_2"
+
+  cat $tmp_file"_1" $tmp_file"_2" | sortbed |
+    awk 'BEGIN{print "chrm\tbeg\tend\tstrand\trs\tdesignType\tU\tREF\tALT\tProbe_ID";}1' |
+    gzip -c >$out_file
+}
