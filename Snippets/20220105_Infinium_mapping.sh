@@ -83,13 +83,13 @@ function create_mask_snp {
 }
 
 function merge_masks_hg38dbSNP20180418 {
-  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies/${PLATFORM}/ -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"||a[i]=="M_SNPcommon_5pt"||a[i]=="M_1baseSwitchSNPcommon_5pt"||a[i]=="M_2extBase_SNPcommon_5pt"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
 function merge_masks_mm10dbSNP142 {
   echo "=== mask/${PLATFORM}.${REFCODE}.mask.tsv.gz"
-  find $TMPFDR/ mask_fromStudies -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
+  find $TMPFDR/ mask_fromStudies/${PLATFORM} -name 'mask_*.tsv' | xargs cat | awk '{split($2,a,";"); print $1,$2,a[1];}' | sort -k1,1 | bedtools groupby -g 1 -c 2,3 -o collapse,distinct | awk 'BEGIN{print "Probe_ID\tmask\tmaskUniq\tM_general";}{split($3,a,",");g="FALSE";for(i=1;i<=length(a);++i){if(a[i]=="M_mapping"||a[i]=="M_nonuniq"){g="TRUE";}} print $0,g;}' | gzip -c >mask/${PLATFORM}.${REFCODE}.mask.tsv.gz
   echo $(zcat mask/${PLATFORM}.${REFCODE}.mask.tsv.gz | awk '$4=="TRUE"' | wc -l)" probes masked."
 }
 
@@ -177,6 +177,18 @@ function csv2standard_input_tsv_MSAdraft2 {
   cd $BASEDIR
 }
 
+function csv2standard_input_tsv_MSA {
+  # requirement: csvtk
+  # column requirement:
+  mkdir -p $TMPFDR/fa
+  cd $TMPFDR/fa
+  # 1:IlmnID (cgNumber with suffix), 2:Name (cgNumber), 3:AddressA_ID, 4:AlleleA_ProbeSeq, 5:AddressB_ID, 6:AlleleB_ProbeSeq
+  zcat -f $CSV | awk 'BEGIN{a=0}/^IlmnID/{a=1;next;}/^\[Controls\]/{a=0;}a' | csvtk csv2tab | awk '{ if($6==""||$6=="NA"){type="II";$6=""}else{type="I";} print $1,type,$3,$4,$5,$6}' >standard_input.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,"NA","NA","II";}/^\[Control/{a=1}' >standard_input_control.tsv
+  zcat -f $CSV | awk -F"," 'a{print "ctl_"$1"_"gensub(" ","_","g",$2),$1,$2,$3,$4,"II";}/^\[Control/{a=1}' >standard_input_control_anno.tsv
+  cd $BASEDIR
+}
+
 function csv2standard_input_tsv_MM285 {
   # requirement: csvtk
   # column requirement:
@@ -230,10 +242,10 @@ function format_mapping_InfiniumI {
   echo "=== Format Inf-I ===="
   ## reformat A
   grep '^cg' ref.sam | awk '$2<256 && $1~/_1$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){if($1~/_[TBN]O/){print $3,$4+48,$4+50,substr($10,50,1),$0;} else {print $3,$4+47,$4+49,substr($10,50,1),$0;}} !and($2,0x4) && and($2,0x10){if($1~/_[TBN]O/){print $3,$4-2,$4,substr($10,1,1),$0;}else{print $3,$4-1,$4+1,substr($10,1,1),$0;}} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >ref_A
-  grep '^rs\|^nv' ref.sam | awk '$2<256 && $1~/_1$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){print $3,$4+48,$4+49,substr($10,50,1),$0} !and($2,0x4) && and($2,0x10){print $3,$4-1,$4,substr($10,1,1),$0;} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >>ref_A
+  grep '^rs\|^nv\|^ch' ref.sam | awk '$2<256 && $1~/_1$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){print $3,$4+48,$4+49,substr($10,50,1),$0} !and($2,0x4) && and($2,0x10){print $3,$4-1,$4,substr($10,1,1),$0;} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >>ref_A
   ## reformat B
   grep '^cg' ref.sam | awk '$2<256 && $1~/_2$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){if($1~/_[TBN]O/){print $3,$4+48,$4+50,substr($10,50,1),$0;} else {print $3,$4+47,$4+49,substr($10,50,1),$0;}} !and($2,0x4) && and($2,0x10){if($1~/_[TBN]O/){print $3,$4-2,$4,substr($10,1,1),$0;}else{print $3,$4-1,$4+1,substr($10,1,1),$0;}} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >ref_B
-  grep '^rs\|^nv' ref.sam | awk '$2<256 && $1~/_2$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){print $3,$4+48,$4+49,substr($10,50,1),$0} !and($2,0x4) && and($2,0x10){print $3,$4-1,$4,substr($10,1,1),$0;} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >>ref_B
+  grep '^rs\|^nv\|^ch' ref.sam | awk '$2<256 && $1~/_2$/' | awk '{$2=and($2,0x14);print $0;}' | awk -F" " -v OFS="\t" '!and($2,0x4) && !and($2,0x10){print $3,$4+48,$4+49,substr($10,50,1),$0} !and($2,0x4) && and($2,0x10){print $3,$4-1,$4,substr($10,1,1),$0;} and($2,0x4){print "*",0,0,substr($10,50,1),$0;}' | awk -v OFS="\t" '{$5=substr($5,1,length($5)-2);print $0;}' | awk -f wanding.awk -e '{if(!match(joinr(16,NF),/(NM:[^[:space:]]*)/,nm)){nm1=".";} else nm1=nm[1]; match(joinr(16,NF),/(AS:[^[:space:]]*)/,as); match($0,/(YD:[^[:space:]]*)/,yd); print joinr(1,10),$14,nm1,as[1],yd[1];}' >>ref_B
   ## merge A,B
   awk 'NR==FNR{a[$5]=$0;}NR!=FNR && ($5 in a){$6=and($6,0x14); print $0"\t"a[$5];}' ref_B ref_A >ref_AB
   
@@ -329,6 +341,21 @@ rmsk1.20220307
 rmsk2.20220321
 Tetranuc2.20220321
 TFBSrm.20221005
+AllTelomeres.20221129
+Centromere.20221129
+ChromHMMfullStack.20230515
+Chromosome.20221129
+CoRSIV.20220309
+EvoCons.20220314
+G4peaksHighConfidence.20220719
+IntergenicCpGs.20220811
+IntermediateMeth.20221121
+RoadMapNegGeneExpCpG.20220814
+RoadMapPosGeneExpCpG.20220814
+TiSigBLUEPRINT.20221209
+TiSigBrain.20221209
+TiSigLoyfer.20221209
+XCILinkedWGBSSorted.20221121
 "
 }
 
@@ -401,6 +428,8 @@ function buildFeatureTechnical {
   zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'NR==1{print $9,"Knowledgebase";}NR>1{print $9,"ProbeType;"substr($9,1,2);}' | gzip -c >features/${PLATFORM}/Technical/ProbeType.gz
   echo " (captured the following probe types)"
   zcat features/${PLATFORM}/Technical/ProbeType.gz | awk 'NR>1' | cut -f2 | uniq -c
+  
+  zcat tsv_manifest/${PLATFORM}.${REFCODE}.manifest.tsv.gz | awk 'BEGIN{print "Probe_ID\tKnowledgebase";}NR==1{next;}$24=="NA"{print $9,"ProbeCGnum;"gsub("CR","",$15);}$24!="NA"{print $9,"ProbeCGnum;"gsub("CG","",$24);}' >features/${PLATFORM}/Technical/ProbeCGnum.gz
 
   ## turn Infinium chemistry into KYCG knowledgebases
   echo -n Processing Infinium chemistry
